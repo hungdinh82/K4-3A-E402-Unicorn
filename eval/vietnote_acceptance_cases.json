@@ -1,0 +1,31 @@
+{
+  "version": "1.1-simple-language",
+  "language": "vi",
+  "standard": {
+    "transcript": "Đúng ý chính, giữ số liệu/tên riêng/thuật ngữ; không thêm nội dung không được nói.",
+    "summary": "Mục quan trọng có bằng chứng trỏ về transcript; phân biệt quyết định, đề xuất và việc chưa chốt.",
+    "pass_rule": "Đạt nếu transcript và summary đều đạt; một lỗi số liệu, phủ định, người phụ trách hoặc bịa quyết định là trượt."
+  },
+  "cases": [
+    {"id":"VN01","category":"basic","utterance":"Hôm nay nhóm thống nhất phát hành bản thử nghiệm vào thứ Ba tuần sau.","expected":["quyết định phát hành","thứ Ba tuần sau"],"must_not_infer":["không tự thêm giờ phát hành"]},
+    {"id":"VN02","category":"number","utterance":"Hiện có 86 trên 120 phản hồi, còn thiếu 34 phản hồi.","expected":["86/120","34"],"must_not_infer":["không đổi thành phần trăm khác"]},
+    {"id":"VN03","category":"owner_deadline","utterance":"Lan gửi báo cáo tổng hợp trước 10 giờ sáng thứ Sáu.","expected":["Lan","báo cáo tổng hợp","10 giờ sáng thứ Sáu"],"must_not_infer":["không gán việc cho người khác"]},
+    {"id":"VN04","category":"negative","utterance":"Chưa quyết định chọn cách lưu dữ liệu A hay cách lưu dữ liệu B.","expected":["chưa quyết định","cách lưu dữ liệu A","cách lưu dữ liệu B"],"must_not_infer":["không ghi đã chọn A","không ghi đã chọn B"]},
+    {"id":"VN05","category":"question","utterance":"Nếu trễ deadline thì ai là người phê duyệt gia hạn? Hiện chưa có câu trả lời.","expected":["câu hỏi mở","chưa có câu trả lời","phê duyệt gia hạn"],"must_not_infer":["không tự nêu tên người phê duyệt"]},
+    {"id":"VN06","category":"common_tech","utterance":"Bản thử nghiệm dùng web app, API và database đơn giản.","expected":["web app","API","database"],"must_not_infer":["không tự thêm tên công nghệ"]},
+    {"id":"VN07","category":"english_mixed","utterance":"We will keep the MVP small and test again next week.","expected":["MVP nhỏ","test lại tuần sau"],"must_not_infer":["không ghi đã test xong"]},
+    {"id":"VN08","category":"decision_vs_proposal","utterance":"Tôi đề xuất dùng microphone trước, nhưng nhóm chưa chốt.","expected":["đề xuất microphone","chưa chốt"],"must_not_infer":["không ghi quyết định dùng microphone"]},
+    {"id":"VN09","category":"multiple_actions","utterance":"Minh kiểm thử bản desktop, Huy kiểm tra quyền microphone, còn Mai cập nhật README.","expected":["Minh–desktop","Huy–microphone","Mai–README"],"must_not_infer":["không gộp sai người phụ trách"]},
+    {"id":"VN10","category":"date","utterance":"Mốc review chuyển từ ngày 12 sang ngày 15 tháng 10 năm 2026.","expected":["12","15/10/2026","chuyển lịch"],"must_not_infer":["không giữ cả hai ngày như ngày chốt"]},
+    {"id":"VN11","category":"numbers_units","utterance":"Latency mục tiêu dưới 800 mili giây, hiện trung bình là 1 phẩy 2 giây.","expected":["<800 ms","1,2 giây"],"must_not_infer":["không nhầm 800 giây"]},
+    {"id":"VN12","category":"negation","utterance":"Không bật TTS trong cuộc họp này và không gửi audio lên server local.","expected":["không bật TTS","không gửi audio lên local server"],"must_not_infer":["không ghi đã bật TTS","không ghi đã gửi audio"]},
+    {"id":"VN13","category":"common_tech","utterance":"API key của Groq phải bắt đầu bằng gsk và không được commit vào Git.","expected":["Groq API key","gsk","không commit Git"],"must_not_infer":["không hiển thị lại toàn bộ key"]},
+    {"id":"VN14","category":"unresolved","utterance":"Chưa biết bản MVP có tách lời từng người nói hay không.","expected":["chưa biết","MVP","tách lời từng người"],"must_not_infer":["không ghi đã có tính năng này"]},
+    {"id":"VN15","category":"noise_resilience","utterance":"Trong phòng có tiếng quạt, nhưng câu cần ghi là: cuộc họp bắt đầu lúc chín giờ.","expected":["tiếng quạt không thành transcript","cuộc họp bắt đầu lúc 9 giờ"],"must_not_infer":["không ghi câu quảng cáo/hallucination"]},
+    {"id":"VN16","category":"short_phrase","utterance":"Khảo sát chưa hoàn tất.","expected":["khảo sát chưa hoàn tất"],"must_not_infer":["không bỏ mất câu ngắn"]},
+    {"id":"VN17","category":"mixed_source","utterance":"Microphone nói dùng tiếng Việt; system audio nói giữ nguyên tên sản phẩm VietNote.","expected":["microphone: dùng tiếng Việt","system: giữ tên VietNote"],"must_not_infer":["không trộn nguồn âm thanh"]},
+    {"id":"VN18","category":"deferred","utterance":"Phần tối ưu chi phí để sang quý sau, chưa cần làm trong sprint này.","expected":["deferred","quý sau","chưa làm sprint này"],"must_not_infer":["không tạo action item ngay sprint này"]},
+    {"id":"VN19","category":"evidence","utterance":"Quyết định giữ phạm vi chỉ gồm microphone và tiếng Việt; bằng chứng là phần demo hôm nay.","expected":["quyết định phạm vi","microphone","tiếng Việt","evidence timestamp"],"must_not_infer":["không trỏ evidence tới segment khác"]},
+    {"id":"VN20","category":"full_meeting","utterance":"Tóm lại: Lan gửi báo cáo thứ Sáu, cách lưu dữ liệu chưa chốt, và review chuyển sang ngày 15 tháng 10 năm 2026.","expected":["Lan–báo cáo–thứ Sáu","cách lưu dữ liệu chưa chốt","15/10/2026"],"must_not_infer":["không biến phương án chưa chốt thành quyết định"]}
+  ]
+}

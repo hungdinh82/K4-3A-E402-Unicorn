@@ -16,12 +16,12 @@ _Hình 1. Workflow từ thu âm, tạo transcript, phân loại nội dung, ki�
 - Problem statement: Transcript có thể bị nhiễu, mất câu ngắn, sai số liệu/tên riêng hoặc trộn nguồn âm thanh; một bản tóm tắt không có căn cứ có thể biến đề xuất thành quyết định hoặc gán sai người phụ trách.
 - Evidence (nguồn trong repo):
   - Báo cáo baseline ghi nhận Whisper Turbo sinh hallucination từ tiếng ồn như câu quảng bá, có thể bỏ câu ngắn “Khảo sát chưa…”, và làm sai tên “chị Mai” thành “chị May” (`ASR_QUALITY_REPORT.md`, §1 và §7.2).
-  - Pipeline hiện có 21 test tự động bao phủ VAD, lọc hallucination, deduplication, chọn model/ngôn ngữ, protocol socket, Groq adapter và tách context hai nguồn (`ASR_QUALITY_REPORT.md`, §8; `tests/test_pipeline.py`).
+  - Pipeline hiện có 21 test tự động bao phủ VAD, lọc hallucination, deduplication, chọn model/ngôn ngữ, protocol socket, Groq adapter và tách context hai nguồn (`ASR_QUALITY_REPORT.md`, §8; `eval/test_pipeline.py`).
   - Mẫu meeting tổng hợp cho thấy PhoWhisper giữ được trạng thái khảo sát, số liệu và action item; latency ASR trung bình khoảng 2,23 giây/segment và end-to-end khoảng 5,3–5,6 giây (`ASR_QUALITY_REPORT.md`, §7.2).
-  - Golden set 20 câu đã có sẵn tại `tests/vietnote_acceptance_cases.json`; tiêu chí trượt ngay gồm bịa quyết định, đảo phủ định, đổi số liệu/ngày, gán sai người hoặc trỏ sai evidence (`tests/VietNote_ACCEPTANCE_TESTS.md`).
+  - Golden set 20 câu đã có sẵn tại `eval/vietnote_acceptance_cases.json`; tiêu chí trượt ngay gồm bịa quyết định, đảo phủ định, đổi số liệu/ngày, gán sai người hoặc trỏ sai evidence (`eval/VietNote_ACCEPTANCE_TESTS.md`).
   - Acceptance run v1.1: đã thử 20 câu, đạt 16 câu, chưa đạt 4 câu, tỷ lệ 80%; đạt ngưỡng số lượng MVP nhưng chưa đạt quality bar đầy đủ vì còn lỗi nghiêm trọng (`VietNote Acceptance Report — v1.1 câu đơn giản`, do nhóm cung cấp ngày 17/09/2026).
 - ≥5 quote/ví dụ nguyên văn + nguồn:
-  1. “Khảo sát chưa hoàn tất.” — `tests/vietnote_acceptance_cases.json`, VN16; kiểm tra câu ngắn.
+  1. “Khảo sát chưa hoàn tất.” — `eval/vietnote_acceptance_cases.json`, VN16; kiểm tra câu ngắn.
   2. “Hiện có 86 trên 120 phản hồi, còn thiếu 34 phản hồi.” — file trên, VN02; kiểm tra số liệu.
   3. “Lan gửi báo cáo tổng hợp trước 10 giờ sáng thứ Sáu.” — file trên, VN03; kiểm tra owner/deadline.
   4. “Chưa quyết định chọn cách lưu dữ liệu A hay cách lưu dữ liệu B.” — file trên, VN04; kiểm tra phủ định và unresolved.
@@ -120,13 +120,13 @@ _Hình 1. Workflow từ thu âm, tạo transcript, phân loại nội dung, ki�
   - Evidence validity: mọi important item có evidence ID tồn tại và click được về đúng segment.
   - Robustness: noise/hallucination bị loại; system/microphone không trộn context.
   - Performance: ghi ASR latency, end-to-end latency và sau này bổ sung p50/p95 trên corpus thật.
-- Golden set: `tests/vietnote_acceptance_cases.json` có đúng 20 case, gồm basic, number, owner/deadline, negative, question, technical term, mixed language, proposal-vs-decision, multiple actions, date, units, negation, unresolved, noise, short phrase, mixed source, deferred, evidence và full meeting.
+- Golden set: `eval/vietnote_acceptance_cases.json` có đúng 20 case, gồm basic, number, owner/deadline, negative, question, technical term, mixed language, proposal-vs-decision, multiple actions, date, units, negation, unresolved, noise, short phrase, mixed source, deferred, evidence và full meeting.
 - Quality bar (chốt tại CP4, giữ nguyên sau đó): **Đạt khi ≥16/20 case (≥80%) qua bộ acceptance và có 0 lỗi làm đổi nghĩa, đổi số liệu, sai credential, tự gán nguồn âm thanh, gán sai owner hoặc evidence sai.**
 - Kết quả các lượt chạy:
 
 | Lượt | Bộ | Kết quả | Trạng thái |
 |---|---|---:|---|
-| Regression hiện có | `tests/test_pipeline.py` | 21/21 pass theo `ASR_QUALITY_REPORT.md` | Đã có |
+| Regression hiện có | `eval/test_pipeline.py` | 21/21 pass theo `ASR_QUALITY_REPORT.md` | Đã có |
 | Rust validation | tests trong `src-tauri/src/lib.rs` | 2 test validation theo report | Đã có theo report; cần chạy lại trong checkout hiện tại |
 | Human acceptance v1.1 | VN01–VN20 | 16/20 = 80% | Đạt ngưỡng số lượng; chưa đạt quality bar vì còn 4 lỗi |
 | Latency thật | corpus người dùng | p50/p95 `[CHƯA ĐO]` | Cần bổ sung |
@@ -196,7 +196,7 @@ _Hình 1. Workflow từ thu âm, tạo transcript, phân loại nội dung, ki�
 |---|---|---|
 | 17/09/2026 | Bổ sung nghiên cứu Otter.ai vào §3, gồm flow, điểm đáng học, điểm cần né và khác biệt của VietNote | Hoàn thiện phần giải pháp tương tự theo yêu cầu của spec; nhấn mạnh bài học từ lỗi VN09, VN13 và VN19 về owner, credential và phân loại/evidence |
 | 17/09/2026 | Tạo spec cho lát cắt structured meeting summary có evidence, dựa trên pipeline ASR hiện tại | Cần chốt quality bar trước CP4; repo đã có acceptance 20 case và validation evidence nhưng chưa có spec hợp nhất. |
-| 17/09/2026 | Chốt quality bar ≥16/20 và 0 severe error | Lấy nguyên văn ngưỡng MVP trong `tests/VietNote_ACCEPTANCE_TESTS.md`; giữ nguyên sau CP4. |
+| 17/09/2026 | Chốt quality bar ≥16/20 và 0 severe error | Lấy nguyên văn ngưỡng MVP trong `eval/VietNote_ACCEPTANCE_TESTS.md`; giữ nguyên sau CP4. |
 | 17/09/2026 | Ghi rõ các gap: user thật, research sản phẩm tương tự, p50/p95, WER/CER, phân công | Các dữ liệu này chưa tồn tại trong repo; đánh dấu để không nhầm prototype evidence với production evidence. |
 | 17/09/2026 | Cập nhật acceptance run v1.1: 16/20 = 80%, 4 case chưa đạt (VN09, VN13, VN17, VN19) | Kết quả test nhóm cung cấp; đạt ngưỡng số lượng nhưng chưa đạt quality bar do lỗi đích action, credential, nguồn âm thanh và phân loại/evidence. |
 | 17/09/2026 | Bốc ngẫu nhiên phân công 5 hạng mục cho 5 thành viên; nhóm trưởng điều phối | Hoàn thiện §8 theo yêu cầu phân công của nhóm. |
