@@ -1,0 +1,455 @@
+{
+  "version": "1.0-normal-meeting-script",
+  "language": "vi",
+  "standard": {
+    "transcript": "Giữ đúng người nói, thứ tự 15 câu trong từng đoạn, ý chính, số liệu, phủ định, tên riêng, deadline và thuật ngữ.",
+    "summary": "Phân biệt đúng cập nhật, đề xuất, quyết định, việc cần làm, việc chưa chốt và việc để sau; không tự thêm thông tin.",
+    "pass_rule": "Một đoạn đạt khi giữ đủ 15 câu, không đổi nghĩa, không bỏ câu quan trọng và không gán nhầm người nói."
+  },
+  "script": {
+    "topic": "Chuẩn bị buổi demo sản phẩm ghi chú cuộc họp VietNote.",
+    "speakers": [
+      "Đinh Văn Hùng",
+      "Nguyễn Thanh Phong",
+      "Lê Hoàng Thiên Phú",
+      "Nguyễn Quốc Cường"
+    ],
+    "segments": 3,
+    "sentences_per_speaker_per_segment": 15,
+    "total_sentences": 180
+  },
+  "cases": [
+    {
+      "id": "MTG01",
+      "category": "normal_meeting_segment",
+      "segment": 1,
+      "segment_title": "Cập nhật tình hình",
+      "speaker": "Đinh Văn Hùng",
+      "sentence_count": 15,
+      "utterance": "Chào mọi người, hôm nay chúng ta họp để cập nhật tiến độ chuẩn bị demo. Mục tiêu của buổi họp là thống nhất việc cần làm trong tuần này. Buổi demo dự kiến diễn ra vào chiều thứ Sáu. Chúng ta sẽ trình bày cách ghi âm và tóm tắt một cuộc họp. Tôi đã xem lại yêu cầu của bài thi. Phần quan trọng nhất là phải cho thấy sản phẩm chạy được. Mỗi người nên nói ngắn gọn về phần mình đang phụ trách. Sau đó chúng ta sẽ bàn về những việc còn thiếu. Phong có thể cập nhật phần giao diện trước không. Phú sẽ nói về phần kết nối âm thanh. Cường sẽ kiểm tra phần tóm tắt và evidence. Tôi sẽ theo dõi tiến độ chung của nhóm. Nếu có vấn đề, mọi người báo ngay trong nhóm chat. Chúng ta cố gắng không để việc nhỏ dồn đến ngày cuối. Mọi người đồng ý với agenda này chứ.",
+      "expected": [
+        "Người nói: Đinh Văn Hùng",
+        "Đoạn 1: Cập nhật tình hình",
+        "Giữ đủ 15 câu và đúng thứ tự ý"
+      ],
+      "must_not_infer": [
+        "Không tự thêm người, số liệu, deadline hoặc quyết định",
+        "Không đổi đề xuất/chưa chốt thành quyết định",
+        "Không gán nội dung cho người nói khác"
+      ],
+      "sentences": [
+        "Chào mọi người, hôm nay chúng ta họp để cập nhật tiến độ chuẩn bị demo.",
+        "Mục tiêu của buổi họp là thống nhất việc cần làm trong tuần này.",
+        "Buổi demo dự kiến diễn ra vào chiều thứ Sáu.",
+        "Chúng ta sẽ trình bày cách ghi âm và tóm tắt một cuộc họp.",
+        "Tôi đã xem lại yêu cầu của bài thi.",
+        "Phần quan trọng nhất là phải cho thấy sản phẩm chạy được.",
+        "Mỗi người nên nói ngắn gọn về phần mình đang phụ trách.",
+        "Sau đó chúng ta sẽ bàn về những việc còn thiếu.",
+        "Phong có thể cập nhật phần giao diện trước không.",
+        "Phú sẽ nói về phần kết nối âm thanh.",
+        "Cường sẽ kiểm tra phần tóm tắt và evidence.",
+        "Tôi sẽ theo dõi tiến độ chung của nhóm.",
+        "Nếu có vấn đề, mọi người báo ngay trong nhóm chat.",
+        "Chúng ta cố gắng không để việc nhỏ dồn đến ngày cuối.",
+        "Mọi người đồng ý với agenda này chứ."
+      ]
+    },
+    {
+      "id": "MTG02",
+      "category": "normal_meeting_segment",
+      "segment": 1,
+      "segment_title": "Cập nhật tình hình",
+      "speaker": "Nguyễn Thanh Phong",
+      "sentence_count": 15,
+      "utterance": "Tôi đã hoàn thành màn hình chính của ứng dụng. Người dùng có thể bấm nút bắt đầu để ghi âm. Màn hình cũng có phần hiển thị transcript trực tiếp. Tôi đã thêm lựa chọn microphone và system audio. Khi chọn cả hai nguồn, giao diện hiển thị hai nhãn riêng. Tôi gọi phần này là audio source. Tôi chưa hoàn thành phần hiển thị lỗi rõ ràng. Hiện tại lỗi chỉ hiện ở dòng trạng thái phía trên. Tôi muốn thêm màu vàng cho cảnh báo nhẹ. Tôi cũng muốn thêm màu đỏ cho lỗi nghiêm trọng. Việc này sẽ giúp người dùng nhìn thấy vấn đề nhanh hơn. Phần responsive trên màn hình nhỏ vẫn còn hơi chật. Tôi sẽ sửa khoảng cách giữa các khung thông tin. Tôi cần thêm một buổi để polish giao diện. Nhìn chung, phần frontend đã chạy ổn.",
+      "expected": [
+        "Người nói: Nguyễn Thanh Phong",
+        "Đoạn 1: Cập nhật tình hình",
+        "Giữ đủ 15 câu và đúng thứ tự ý"
+      ],
+      "must_not_infer": [
+        "Không tự thêm người, số liệu, deadline hoặc quyết định",
+        "Không đổi đề xuất/chưa chốt thành quyết định",
+        "Không gán nội dung cho người nói khác"
+      ],
+      "sentences": [
+        "Tôi đã hoàn thành màn hình chính của ứng dụng.",
+        "Người dùng có thể bấm nút bắt đầu để ghi âm.",
+        "Màn hình cũng có phần hiển thị transcript trực tiếp.",
+        "Tôi đã thêm lựa chọn microphone và system audio.",
+        "Khi chọn cả hai nguồn, giao diện hiển thị hai nhãn riêng.",
+        "Tôi gọi phần này là audio source.",
+        "Tôi chưa hoàn thành phần hiển thị lỗi rõ ràng.",
+        "Hiện tại lỗi chỉ hiện ở dòng trạng thái phía trên.",
+        "Tôi muốn thêm màu vàng cho cảnh báo nhẹ.",
+        "Tôi cũng muốn thêm màu đỏ cho lỗi nghiêm trọng.",
+        "Việc này sẽ giúp người dùng nhìn thấy vấn đề nhanh hơn.",
+        "Phần responsive trên màn hình nhỏ vẫn còn hơi chật.",
+        "Tôi sẽ sửa khoảng cách giữa các khung thông tin.",
+        "Tôi cần thêm một buổi để polish giao diện.",
+        "Nhìn chung, phần frontend đã chạy ổn."
+      ]
+    },
+    {
+      "id": "MTG03",
+      "category": "normal_meeting_segment",
+      "segment": 1,
+      "segment_title": "Cập nhật tình hình",
+      "speaker": "Lê Hoàng Thiên Phú",
+      "sentence_count": 15,
+      "utterance": "Phần âm thanh hiện đã nhận được microphone trên máy Mac. Tôi cũng đã thử lấy system audio trong một cuộc gọi thử. Hai nguồn âm thanh được gửi thành các segment riêng. Mỗi segment có thời gian bắt đầu. Segment cũng có nhãn là microphone hoặc system audio. Local ASR đang dùng Whisper để nhận diện tiếng Việt. Với câu ngắn, kết quả đôi khi chưa ổn định. Với tiếng quạt, model có thể tạo ra một câu không có thật. Tôi đã thêm bộ lọc cho một số câu lặp. Bộ lọc cũng loại những câu dài bất thường. Tôi chưa đo đủ tốc độ trên giọng nói của nhiều người. Hôm nay tôi sẽ ghi thêm vài đoạn audio thử. Tôi muốn giữ thời gian xử lý dưới ba giây cho mỗi đoạn. Nếu máy chậm, chúng ta có thể dùng Groq làm fallback. Phần capture hiện không còn bị treo như hôm qua.",
+      "expected": [
+        "Người nói: Lê Hoàng Thiên Phú",
+        "Đoạn 1: Cập nhật tình hình",
+        "Giữ đủ 15 câu và đúng thứ tự ý"
+      ],
+      "must_not_infer": [
+        "Không tự thêm người, số liệu, deadline hoặc quyết định",
+        "Không đổi đề xuất/chưa chốt thành quyết định",
+        "Không gán nội dung cho người nói khác"
+      ],
+      "sentences": [
+        "Phần âm thanh hiện đã nhận được microphone trên máy Mac.",
+        "Tôi cũng đã thử lấy system audio trong một cuộc gọi thử.",
+        "Hai nguồn âm thanh được gửi thành các segment riêng.",
+        "Mỗi segment có thời gian bắt đầu.",
+        "Segment cũng có nhãn là microphone hoặc system audio.",
+        "Local ASR đang dùng Whisper để nhận diện tiếng Việt.",
+        "Với câu ngắn, kết quả đôi khi chưa ổn định.",
+        "Với tiếng quạt, model có thể tạo ra một câu không có thật.",
+        "Tôi đã thêm bộ lọc cho một số câu lặp.",
+        "Bộ lọc cũng loại những câu dài bất thường.",
+        "Tôi chưa đo đủ tốc độ trên giọng nói của nhiều người.",
+        "Hôm nay tôi sẽ ghi thêm vài đoạn audio thử.",
+        "Tôi muốn giữ thời gian xử lý dưới ba giây cho mỗi đoạn.",
+        "Nếu máy chậm, chúng ta có thể dùng Groq làm fallback.",
+        "Phần capture hiện không còn bị treo như hôm qua."
+      ]
+    },
+    {
+      "id": "MTG04",
+      "category": "normal_meeting_segment",
+      "segment": 2,
+      "segment_title": "Bàn vấn đề và giải pháp",
+      "speaker": "Nguyễn Quốc Cường",
+      "sentence_count": 15,
+      "utterance": "Tôi đã kiểm tra schema của meeting summary. Summary hiện có các nhóm key points, decisions và action items. Ngoài ra còn có tentative decisions và unresolved topics. Mỗi mục quan trọng cần có evidence ID. Evidence ID phải trỏ đến một segment có thật. Khi bấm vào timestamp, người dùng sẽ xem được câu gốc. Tôi đã thử với câu có số liệu tám mươi sáu trên một trăm hai mươi. Kết quả vẫn giữ đúng cả số tổng và số còn thiếu. Tôi cũng thử câu có owner là Lan. Owner được giữ đúng khi tên xuất hiện rõ trong transcript. Phần chưa chốt được đưa vào unresolved thay vì decision. Tuy nhiên lỗi nhận diện tên kỹ thuật vẫn còn. Từ Groq đôi khi bị nhận thành một từ tiếng Việt khác. Tôi sẽ bổ sung các câu này vào bộ kiểm thử. Phần summary cơ bản đã đủ để làm demo.",
+      "expected": [
+        "Người nói: Nguyễn Quốc Cường",
+        "Đoạn 2: Bàn vấn đề và giải pháp",
+        "Giữ đủ 15 câu và đúng thứ tự ý"
+      ],
+      "must_not_infer": [
+        "Không tự thêm người, số liệu, deadline hoặc quyết định",
+        "Không đổi đề xuất/chưa chốt thành quyết định",
+        "Không gán nội dung cho người nói khác"
+      ],
+      "sentences": [
+        "Tôi đã kiểm tra schema của meeting summary.",
+        "Summary hiện có các nhóm key points, decisions và action items.",
+        "Ngoài ra còn có tentative decisions và unresolved topics.",
+        "Mỗi mục quan trọng cần có evidence ID.",
+        "Evidence ID phải trỏ đến một segment có thật.",
+        "Khi bấm vào timestamp, người dùng sẽ xem được câu gốc.",
+        "Tôi đã thử với câu có số liệu tám mươi sáu trên một trăm hai mươi.",
+        "Kết quả vẫn giữ đúng cả số tổng và số còn thiếu.",
+        "Tôi cũng thử câu có owner là Lan.",
+        "Owner được giữ đúng khi tên xuất hiện rõ trong transcript.",
+        "Phần chưa chốt được đưa vào unresolved thay vì decision.",
+        "Tuy nhiên lỗi nhận diện tên kỹ thuật vẫn còn.",
+        "Từ Groq đôi khi bị nhận thành một từ tiếng Việt khác.",
+        "Tôi sẽ bổ sung các câu này vào bộ kiểm thử.",
+        "Phần summary cơ bản đã đủ để làm demo."
+      ]
+    },
+    {
+      "id": "MTG05",
+      "category": "normal_meeting_segment",
+      "segment": 2,
+      "segment_title": "Bàn vấn đề và giải pháp",
+      "speaker": "Đinh Văn Hùng",
+      "sentence_count": 15,
+      "utterance": "Cảm ơn mọi người, bây giờ chúng ta bàn vào các vấn đề còn lại. Tôi thấy hai điểm cần ưu tiên là lỗi âm thanh và lỗi summary. Demo phải cho người xem hiểu ngay câu nào là quyết định. Demo cũng phải cho thấy câu nào vẫn chưa chốt. Chúng ta không nên để AI tự đoán khi transcript không đủ rõ. Cost of error của việc gán sai người là khá cao. Nếu thiếu evidence, mục đó nên được giữ lại để kiểm tra. Tôi đề nghị không tự động gửi thông báo cho owner trong bản demo. Chỉ cần hiển thị action item và người phụ trách. Phong có thể thiết kế một nhãn low-confidence không. Phú có thể ghi log những segment bị bộ lọc loại không. Cường có thể kiểm tra lại các evidence ID trước khi lưu note không. Chúng ta cần một flow đơn giản và dễ giải thích. Nếu không đủ thời gian, hãy bỏ bớt tính năng phụ. Ưu tiên chất lượng của transcript và summary trước.",
+      "expected": [
+        "Người nói: Đinh Văn Hùng",
+        "Đoạn 2: Bàn vấn đề và giải pháp",
+        "Giữ đủ 15 câu và đúng thứ tự ý"
+      ],
+      "must_not_infer": [
+        "Không tự thêm người, số liệu, deadline hoặc quyết định",
+        "Không đổi đề xuất/chưa chốt thành quyết định",
+        "Không gán nội dung cho người nói khác"
+      ],
+      "sentences": [
+        "Cảm ơn mọi người, bây giờ chúng ta bàn vào các vấn đề còn lại.",
+        "Tôi thấy hai điểm cần ưu tiên là lỗi âm thanh và lỗi summary.",
+        "Demo phải cho người xem hiểu ngay câu nào là quyết định.",
+        "Demo cũng phải cho thấy câu nào vẫn chưa chốt.",
+        "Chúng ta không nên để AI tự đoán khi transcript không đủ rõ.",
+        "Cost of error của việc gán sai người là khá cao.",
+        "Nếu thiếu evidence, mục đó nên được giữ lại để kiểm tra.",
+        "Tôi đề nghị không tự động gửi thông báo cho owner trong bản demo.",
+        "Chỉ cần hiển thị action item và người phụ trách.",
+        "Phong có thể thiết kế một nhãn low-confidence không.",
+        "Phú có thể ghi log những segment bị bộ lọc loại không.",
+        "Cường có thể kiểm tra lại các evidence ID trước khi lưu note không.",
+        "Chúng ta cần một flow đơn giản và dễ giải thích.",
+        "Nếu không đủ thời gian, hãy bỏ bớt tính năng phụ.",
+        "Ưu tiên chất lượng của transcript và summary trước."
+      ]
+    },
+    {
+      "id": "MTG06",
+      "category": "normal_meeting_segment",
+      "segment": 2,
+      "segment_title": "Bàn vấn đề và giải pháp",
+      "speaker": "Nguyễn Thanh Phong",
+      "sentence_count": 15,
+      "utterance": "Tôi đồng ý với việc ưu tiên flow chính. Tôi sẽ đặt trạng thái của cuộc họp ngay cạnh nút ghi âm. Khi đang chạy, trạng thái sẽ là đang lắng nghe. Khi có lỗi, trạng thái sẽ hiện nội dung lỗi ngắn gọn. Tôi có thể thêm một biểu tượng cảnh báo màu vàng. Tuy nhiên hiện backend chưa gửi confidence score cụ thể. Vì vậy tôi không muốn hiển thị một phần trăm giả. Thay vào đó, tôi sẽ dùng chữ cần kiểm tra khi segment bị nghi ngờ. Nếu không có dữ liệu từ backend, nhãn này sẽ không xuất hiện. Phần transcript sẽ luôn hiển thị timestamp và nguồn âm thanh. Người dùng có thể mở transcript gốc sau khi lưu note. Tôi sẽ làm nút timestamp dễ nhìn hơn. Tôi cũng sẽ thêm dòng hướng dẫn bấm vào evidence. Việc này giúp giám khảo hiểu cách kiểm chứng kết quả. Tôi sẽ gửi bản giao diện mới vào tối nay.",
+      "expected": [
+        "Người nói: Nguyễn Thanh Phong",
+        "Đoạn 2: Bàn vấn đề và giải pháp",
+        "Giữ đủ 15 câu và đúng thứ tự ý"
+      ],
+      "must_not_infer": [
+        "Không tự thêm người, số liệu, deadline hoặc quyết định",
+        "Không đổi đề xuất/chưa chốt thành quyết định",
+        "Không gán nội dung cho người nói khác"
+      ],
+      "sentences": [
+        "Tôi đồng ý với việc ưu tiên flow chính.",
+        "Tôi sẽ đặt trạng thái của cuộc họp ngay cạnh nút ghi âm.",
+        "Khi đang chạy, trạng thái sẽ là đang lắng nghe.",
+        "Khi có lỗi, trạng thái sẽ hiện nội dung lỗi ngắn gọn.",
+        "Tôi có thể thêm một biểu tượng cảnh báo màu vàng.",
+        "Tuy nhiên hiện backend chưa gửi confidence score cụ thể.",
+        "Vì vậy tôi không muốn hiển thị một phần trăm giả.",
+        "Thay vào đó, tôi sẽ dùng chữ cần kiểm tra khi segment bị nghi ngờ.",
+        "Nếu không có dữ liệu từ backend, nhãn này sẽ không xuất hiện.",
+        "Phần transcript sẽ luôn hiển thị timestamp và nguồn âm thanh.",
+        "Người dùng có thể mở transcript gốc sau khi lưu note.",
+        "Tôi sẽ làm nút timestamp dễ nhìn hơn.",
+        "Tôi cũng sẽ thêm dòng hướng dẫn bấm vào evidence.",
+        "Việc này giúp giám khảo hiểu cách kiểm chứng kết quả.",
+        "Tôi sẽ gửi bản giao diện mới vào tối nay."
+      ]
+    },
+    {
+      "id": "MTG07",
+      "category": "normal_meeting_segment",
+      "segment": 2,
+      "segment_title": "Bàn vấn đề và giải pháp",
+      "speaker": "Lê Hoàng Thiên Phú",
+      "sentence_count": 15,
+      "utterance": "Về phần audio, tôi sẽ ghi log rõ từng lý do segment bị loại. Log sẽ ghi câu bị lặp hoặc câu có tốc độ bất thường. Log cũng sẽ ghi câu bị nhận diện từ tiếng ồn. Những câu bị loại sẽ không xuất hiện trong transcript chính. Điều này giúp summary không lấy nhầm dữ liệu rác. Tuy nhiên người dùng hiện chưa xem được danh sách câu bị loại. Tôi nghĩ bản demo có thể mở terminal để xem log. Nhưng cách này không thân thiện với người dùng bình thường. Nếu còn thời gian, tôi sẽ gửi warning lên giao diện. Tôi sẽ chạy lại test với tiếng quạt và tiếng gõ bàn phím. Tôi cũng sẽ thử câu nói nhỏ và câu nói rất ngắn. Nguồn Both cần được dùng cho case tách microphone và system audio. Với nguồn System, chúng ta không thể chứng minh có microphone. Tôi sẽ ghi rõ backend đang dùng là local hay Groq. Như vậy phần test sẽ dễ đối chiếu hơn.",
+      "expected": [
+        "Người nói: Lê Hoàng Thiên Phú",
+        "Đoạn 2: Bàn vấn đề và giải pháp",
+        "Giữ đủ 15 câu và đúng thứ tự ý"
+      ],
+      "must_not_infer": [
+        "Không tự thêm người, số liệu, deadline hoặc quyết định",
+        "Không đổi đề xuất/chưa chốt thành quyết định",
+        "Không gán nội dung cho người nói khác"
+      ],
+      "sentences": [
+        "Về phần audio, tôi sẽ ghi log rõ từng lý do segment bị loại.",
+        "Log sẽ ghi câu bị lặp hoặc câu có tốc độ bất thường.",
+        "Log cũng sẽ ghi câu bị nhận diện từ tiếng ồn.",
+        "Những câu bị loại sẽ không xuất hiện trong transcript chính.",
+        "Điều này giúp summary không lấy nhầm dữ liệu rác.",
+        "Tuy nhiên người dùng hiện chưa xem được danh sách câu bị loại.",
+        "Tôi nghĩ bản demo có thể mở terminal để xem log.",
+        "Nhưng cách này không thân thiện với người dùng bình thường.",
+        "Nếu còn thời gian, tôi sẽ gửi warning lên giao diện.",
+        "Tôi sẽ chạy lại test với tiếng quạt và tiếng gõ bàn phím.",
+        "Tôi cũng sẽ thử câu nói nhỏ và câu nói rất ngắn.",
+        "Nguồn Both cần được dùng cho case tách microphone và system audio.",
+        "Với nguồn System, chúng ta không thể chứng minh có microphone.",
+        "Tôi sẽ ghi rõ backend đang dùng là local hay Groq.",
+        "Như vậy phần test sẽ dễ đối chiếu hơn."
+      ]
+    },
+    {
+      "id": "MTG08",
+      "category": "normal_meeting_segment",
+      "segment": 3,
+      "segment_title": "Chốt việc và kế hoạch tiếp theo",
+      "speaker": "Nguyễn Quốc Cường",
+      "sentence_count": 15,
+      "utterance": "Tôi sẽ kiểm tra lại bốn case chưa đạt trong acceptance report. Case VN09 đang nhận README thành một cụm từ sai. Case VN13 nhận Groq và gsk chưa đúng. Đây là lỗi nghiêm trọng vì có thể làm sai API key. Case VN17 cần chạy lại với cả microphone và system audio. Case VN19 cần phân loại là decision thay vì tentative decision. Evidence của VN19 cũng phải hiện timestamp rõ ràng. Tôi sẽ tạo một bảng theo dõi cho bốn case này. Mỗi case sẽ có transcript, summary và kết quả evidence. Tôi sẽ thêm positive test cho từ README. Tôi cũng sẽ thêm negative test để tránh sửa quá rộng. Với Groq, tôi sẽ giữ nguyên cả chữ hoa và chuỗi gsk. Prompt sẽ cấm tự sửa credential nếu không có căn cứ. Nếu evidence ID sai, backend phải bỏ mục đó. Tôi sẽ báo lại kết quả sau khi chạy xong.",
+      "expected": [
+        "Người nói: Nguyễn Quốc Cường",
+        "Đoạn 3: Chốt việc và kế hoạch tiếp theo",
+        "Giữ đủ 15 câu và đúng thứ tự ý"
+      ],
+      "must_not_infer": [
+        "Không tự thêm người, số liệu, deadline hoặc quyết định",
+        "Không đổi đề xuất/chưa chốt thành quyết định",
+        "Không gán nội dung cho người nói khác"
+      ],
+      "sentences": [
+        "Tôi sẽ kiểm tra lại bốn case chưa đạt trong acceptance report.",
+        "Case VN09 đang nhận README thành một cụm từ sai.",
+        "Case VN13 nhận Groq và gsk chưa đúng.",
+        "Đây là lỗi nghiêm trọng vì có thể làm sai API key.",
+        "Case VN17 cần chạy lại với cả microphone và system audio.",
+        "Case VN19 cần phân loại là decision thay vì tentative decision.",
+        "Evidence của VN19 cũng phải hiện timestamp rõ ràng.",
+        "Tôi sẽ tạo một bảng theo dõi cho bốn case này.",
+        "Mỗi case sẽ có transcript, summary và kết quả evidence.",
+        "Tôi sẽ thêm positive test cho từ README.",
+        "Tôi cũng sẽ thêm negative test để tránh sửa quá rộng.",
+        "Với Groq, tôi sẽ giữ nguyên cả chữ hoa và chuỗi gsk.",
+        "Prompt sẽ cấm tự sửa credential nếu không có căn cứ.",
+        "Nếu evidence ID sai, backend phải bỏ mục đó.",
+        "Tôi sẽ báo lại kết quả sau khi chạy xong."
+      ]
+    },
+    {
+      "id": "MTG09",
+      "category": "normal_meeting_segment",
+      "segment": 3,
+      "segment_title": "Chốt việc và kế hoạch tiếp theo",
+      "speaker": "Đinh Văn Hùng",
+      "sentence_count": 15,
+      "utterance": "Chúng ta thống nhất chốt flow demo theo sáu bước. Bước một là chọn nguồn âm thanh và bắt đầu ghi. Bước hai là chia audio thành các segment có timestamp. Bước ba là hiển thị raw text và clean text. Bước bốn là phân loại nội dung cuộc họp. Bước năm là gắn evidence vào các mục quan trọng. Bước sáu là cho người dùng kiểm tra và lưu note. Phong phụ trách hoàn thiện giao diện và trạng thái. Phú phụ trách log audio và chạy lại test nguồn Both. Cường phụ trách prompt, schema và bốn case lỗi. Tôi phụ trách tổng hợp spec và quay demo. Chúng ta sẽ không đưa tính năng speaker diarization vào bản này. Chúng ta cũng không tự động gửi action item cho người khác. Nếu thiếu căn cứ, hệ thống phải nói là chưa chắc chắn. Mọi người gửi phần hoàn thành trước chín giờ tối mai nhé.",
+      "expected": [
+        "Người nói: Đinh Văn Hùng",
+        "Đoạn 3: Chốt việc và kế hoạch tiếp theo",
+        "Giữ đủ 15 câu và đúng thứ tự ý"
+      ],
+      "must_not_infer": [
+        "Không tự thêm người, số liệu, deadline hoặc quyết định",
+        "Không đổi đề xuất/chưa chốt thành quyết định",
+        "Không gán nội dung cho người nói khác"
+      ],
+      "sentences": [
+        "Chúng ta thống nhất chốt flow demo theo sáu bước.",
+        "Bước một là chọn nguồn âm thanh và bắt đầu ghi.",
+        "Bước hai là chia audio thành các segment có timestamp.",
+        "Bước ba là hiển thị raw text và clean text.",
+        "Bước bốn là phân loại nội dung cuộc họp.",
+        "Bước năm là gắn evidence vào các mục quan trọng.",
+        "Bước sáu là cho người dùng kiểm tra và lưu note.",
+        "Phong phụ trách hoàn thiện giao diện và trạng thái.",
+        "Phú phụ trách log audio và chạy lại test nguồn Both.",
+        "Cường phụ trách prompt, schema và bốn case lỗi.",
+        "Tôi phụ trách tổng hợp spec và quay demo.",
+        "Chúng ta sẽ không đưa tính năng speaker diarization vào bản này.",
+        "Chúng ta cũng không tự động gửi action item cho người khác.",
+        "Nếu thiếu căn cứ, hệ thống phải nói là chưa chắc chắn.",
+        "Mọi người gửi phần hoàn thành trước chín giờ tối mai nhé."
+      ]
+    },
+    {
+      "id": "MTG10",
+      "category": "normal_meeting_segment",
+      "segment": 3,
+      "segment_title": "Chốt việc và kế hoạch tiếp theo",
+      "speaker": "Nguyễn Thanh Phong",
+      "sentence_count": 15,
+      "utterance": "Tôi ghi nhận phần việc của mình là giao diện và trạng thái. Tôi sẽ thêm nhãn đang xử lý cho lúc summary chưa xong. Tôi sẽ thêm nhãn cần kiểm tra cho low-confidence nếu backend gửi warning. Tôi sẽ giữ màu vàng cho trạng thái này. Lỗi nghiêm trọng sẽ dùng màu đỏ và câu giải thích ngắn. Tôi sẽ không dùng quá nhiều màu trong cùng một màn hình. Khu vực summary sẽ có các tiêu đề rõ ràng. Nút xem evidence sẽ hiện timestamp đầu tiên. Nếu có nhiều evidence, nút sẽ hiện thêm số lượng đoạn. Transcript gốc sẽ mở rộng khi người dùng bấm evidence. Đoạn được chọn sẽ có nền nổi bật. Người dùng vẫn xem được raw text bên dưới clean text. Tôi sẽ kiểm tra giao diện ở chế độ sáng và tối. Tôi sẽ chụp một ảnh màn hình cho slide. Tôi sẽ báo nhóm khi bản frontend mới đã sẵn sàng.",
+      "expected": [
+        "Người nói: Nguyễn Thanh Phong",
+        "Đoạn 3: Chốt việc và kế hoạch tiếp theo",
+        "Giữ đủ 15 câu và đúng thứ tự ý"
+      ],
+      "must_not_infer": [
+        "Không tự thêm người, số liệu, deadline hoặc quyết định",
+        "Không đổi đề xuất/chưa chốt thành quyết định",
+        "Không gán nội dung cho người nói khác"
+      ],
+      "sentences": [
+        "Tôi ghi nhận phần việc của mình là giao diện và trạng thái.",
+        "Tôi sẽ thêm nhãn đang xử lý cho lúc summary chưa xong.",
+        "Tôi sẽ thêm nhãn cần kiểm tra cho low-confidence nếu backend gửi warning.",
+        "Tôi sẽ giữ màu vàng cho trạng thái này.",
+        "Lỗi nghiêm trọng sẽ dùng màu đỏ và câu giải thích ngắn.",
+        "Tôi sẽ không dùng quá nhiều màu trong cùng một màn hình.",
+        "Khu vực summary sẽ có các tiêu đề rõ ràng.",
+        "Nút xem evidence sẽ hiện timestamp đầu tiên.",
+        "Nếu có nhiều evidence, nút sẽ hiện thêm số lượng đoạn.",
+        "Transcript gốc sẽ mở rộng khi người dùng bấm evidence.",
+        "Đoạn được chọn sẽ có nền nổi bật.",
+        "Người dùng vẫn xem được raw text bên dưới clean text.",
+        "Tôi sẽ kiểm tra giao diện ở chế độ sáng và tối.",
+        "Tôi sẽ chụp một ảnh màn hình cho slide.",
+        "Tôi sẽ báo nhóm khi bản frontend mới đã sẵn sàng."
+      ]
+    },
+    {
+      "id": "MTG11",
+      "category": "normal_meeting_segment",
+      "segment": 3,
+      "segment_title": "Chốt việc và kế hoạch tiếp theo",
+      "speaker": "Lê Hoàng Thiên Phú",
+      "sentence_count": 15,
+      "utterance": "Tôi nhận phần kiểm tra capture và backend ASR. Tôi sẽ chạy thử bằng microphone trước. Sau đó tôi sẽ chạy thử bằng system audio. Cuối cùng tôi sẽ chạy lại bằng cả hai nguồn. Tôi sẽ lưu thời gian xử lý của từng segment. Tôi sẽ ghi rõ model local hoặc Groq trong kết quả. Tôi sẽ kiểm tra câu có số liệu và deadline. Tôi sẽ kiểm tra câu phủ định và câu chưa chốt. Tôi sẽ kiểm tra câu có tên người phụ trách. Tôi sẽ xem log để phát hiện câu bị bộ lọc loại. Nếu có segment bị drop, tôi sẽ ghi rõ nguyên nhân. Tôi sẽ không coi một câu bị loại là câu đạt. Tôi sẽ gửi file log cho Hùng sau mỗi lượt chạy. Tôi sẽ cố gắng hoàn thành phần này trước buổi validation. Nếu local chậm, tôi sẽ báo để nhóm cân nhắc Groq.",
+      "expected": [
+        "Người nói: Lê Hoàng Thiên Phú",
+        "Đoạn 3: Chốt việc và kế hoạch tiếp theo",
+        "Giữ đủ 15 câu và đúng thứ tự ý"
+      ],
+      "must_not_infer": [
+        "Không tự thêm người, số liệu, deadline hoặc quyết định",
+        "Không đổi đề xuất/chưa chốt thành quyết định",
+        "Không gán nội dung cho người nói khác"
+      ],
+      "sentences": [
+        "Tôi nhận phần kiểm tra capture và backend ASR.",
+        "Tôi sẽ chạy thử bằng microphone trước.",
+        "Sau đó tôi sẽ chạy thử bằng system audio.",
+        "Cuối cùng tôi sẽ chạy lại bằng cả hai nguồn.",
+        "Tôi sẽ lưu thời gian xử lý của từng segment.",
+        "Tôi sẽ ghi rõ model local hoặc Groq trong kết quả.",
+        "Tôi sẽ kiểm tra câu có số liệu và deadline.",
+        "Tôi sẽ kiểm tra câu phủ định và câu chưa chốt.",
+        "Tôi sẽ kiểm tra câu có tên người phụ trách.",
+        "Tôi sẽ xem log để phát hiện câu bị bộ lọc loại.",
+        "Nếu có segment bị drop, tôi sẽ ghi rõ nguyên nhân.",
+        "Tôi sẽ không coi một câu bị loại là câu đạt.",
+        "Tôi sẽ gửi file log cho Hùng sau mỗi lượt chạy.",
+        "Tôi sẽ cố gắng hoàn thành phần này trước buổi validation.",
+        "Nếu local chậm, tôi sẽ báo để nhóm cân nhắc Groq."
+      ]
+    },
+    {
+      "id": "MTG12",
+      "category": "normal_meeting_segment",
+      "segment": 3,
+      "segment_title": "Chốt việc và kế hoạch tiếp theo",
+      "speaker": "Nguyễn Quốc Cường",
+      "sentence_count": 15,
+      "utterance": "Tôi chốt tiêu chuẩn đạt là ít nhất mười sáu trên hai mươi case. Ngoài tỷ lệ đó, nhóm phải có không lỗi nghiêm trọng. Lỗi nghiêm trọng gồm đổi nghĩa, đổi số liệu và sai credential. Gán sai owner cũng được xem là lỗi nghiêm trọng. Tự gán nguồn âm thanh cũng không được chấp nhận. Evidence sai hoặc không mở được cũng là lỗi nghiêm trọng. Tôi sẽ cập nhật bảng kết quả sau khi chạy lại bốn case. Tôi sẽ kiểm tra summary bằng transcript đầy đủ ở cuối cuộc họp. Tôi sẽ không dùng summary tạm thời làm nguồn sự thật cuối cùng. Tôi sẽ thêm link đến evidence trong phần ghi chú hướng dẫn. Tôi sẽ chuẩn bị một ví dụ decision rõ ràng. Tôi cũng sẽ chuẩn bị một ví dụ unresolved để so sánh. Nếu câu không đủ căn cứ, tôi sẽ giữ trạng thái chưa chốt. Tôi sẽ gửi checklist cho hai willing user trước khi test. Sau khi cả nhóm xác nhận, chúng ta có thể chốt bản demo.",
+      "expected": [
+        "Người nói: Nguyễn Quốc Cường",
+        "Đoạn 3: Chốt việc và kế hoạch tiếp theo",
+        "Giữ đủ 15 câu và đúng thứ tự ý"
+      ],
+      "must_not_infer": [
+        "Không tự thêm người, số liệu, deadline hoặc quyết định",
+        "Không đổi đề xuất/chưa chốt thành quyết định",
+        "Không gán nội dung cho người nói khác"
+      ],
+      "sentences": [
+        "Tôi chốt tiêu chuẩn đạt là ít nhất mười sáu trên hai mươi case.",
+        "Ngoài tỷ lệ đó, nhóm phải có không lỗi nghiêm trọng.",
+        "Lỗi nghiêm trọng gồm đổi nghĩa, đổi số liệu và sai credential.",
+        "Gán sai owner cũng được xem là lỗi nghiêm trọng.",
+        "Tự gán nguồn âm thanh cũng không được chấp nhận.",
+        "Evidence sai hoặc không mở được cũng là lỗi nghiêm trọng.",
+        "Tôi sẽ cập nhật bảng kết quả sau khi chạy lại bốn case.",
+        "Tôi sẽ kiểm tra summary bằng transcript đầy đủ ở cuối cuộc họp.",
+        "Tôi sẽ không dùng summary tạm thời làm nguồn sự thật cuối cùng.",
+        "Tôi sẽ thêm link đến evidence trong phần ghi chú hướng dẫn.",
+        "Tôi sẽ chuẩn bị một ví dụ decision rõ ràng.",
+        "Tôi cũng sẽ chuẩn bị một ví dụ unresolved để so sánh.",
+        "Nếu câu không đủ căn cứ, tôi sẽ giữ trạng thái chưa chốt.",
+        "Tôi sẽ gửi checklist cho hai willing user trước khi test.",
+        "Sau khi cả nhóm xác nhận, chúng ta có thể chốt bản demo."
+      ]
+    }
+  ]
+}
