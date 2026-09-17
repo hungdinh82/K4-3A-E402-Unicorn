@@ -28,12 +28,12 @@ function Unresolved({ items, onEvidence, evidenceLabel }: { items: UnresolvedTop
 export function StructuredMeetingSummaryView({ summary, onEvidence, evidenceLabel }: { summary: StructuredMeetingSummary; onEvidence?: EvidenceHandler; evidenceLabel?: EvidenceLabel }) {
   return <div className="structured-summary">
     {summary.tldr && <section className="structured-tldr"><h4><Sparkles size={15}/>TL;DR</h4><p>{summary.tldr}</p></section>}
-    <BulletSection title="Key Points" icon={Text} items={summary.keyPoints} onEvidence={onEvidence} evidenceLabel={evidenceLabel}/>
-    <BulletSection title="Decisions" icon={CheckCheck} items={summary.decisions} onEvidence={onEvidence} evidenceLabel={evidenceLabel}/>
-    <BulletSection title="Tentative Decisions" icon={Clock3} items={summary.tentativeDecisions} onEvidence={onEvidence} evidenceLabel={evidenceLabel}/>
+    <BulletSection title="Ý chính" icon={Text} items={summary.keyPoints} onEvidence={onEvidence} evidenceLabel={evidenceLabel}/>
+    <BulletSection title="Quyết định" icon={CheckCheck} items={summary.decisions} onEvidence={onEvidence} evidenceLabel={evidenceLabel}/>
+    <BulletSection title="Quyết định dự kiến" icon={Clock3} items={summary.tentativeDecisions} onEvidence={onEvidence} evidenceLabel={evidenceLabel}/>
     <Unresolved items={summary.unresolvedTopics} onEvidence={onEvidence} evidenceLabel={evidenceLabel}/>
     <Actions items={summary.actionItems} onEvidence={onEvidence} evidenceLabel={evidenceLabel}/>
-    <BulletSection title="Open Questions" icon={CircleHelp} items={summary.openQuestions} onEvidence={onEvidence} evidenceLabel={evidenceLabel}/>
-    <BulletSection title="Deferred" icon={PauseCircle} items={summary.deferred.map(item => ({ ...item, text: [item.text, item.target].filter(Boolean).join(' → ') }))} onEvidence={onEvidence} evidenceLabel={evidenceLabel}/>
+    <BulletSection title="Câu hỏi mở" icon={CircleHelp} items={summary.openQuestions} onEvidence={onEvidence} evidenceLabel={evidenceLabel}/>
+    <BulletSection title="Tạm hoãn" icon={PauseCircle} items={summary.deferred.map(item => ({ ...item, text: [item.text, item.target].filter(Boolean).join(' → ') }))} onEvidence={onEvidence} evidenceLabel={evidenceLabel}/>
   </div>
 }

@@ -1,0 +1,12 @@
+{
+  "case_version": "1.1-simple-language",
+  "backend": "unknown (not recorded in export)",
+  "source": "system audio",
+  "results": [
+    {"id":"VN01","passed":true},{"id":"VN02","passed":true},{"id":"VN03","passed":true},{"id":"VN04","passed":true},{"id":"VN05","passed":true},
+    {"id":"VN06","passed":true},{"id":"VN07","passed":true},{"id":"VN08","passed":true},{"id":"VN09","passed":false},
+    {"id":"VN10","passed":true},{"id":"VN11","passed":true},{"id":"VN12","passed":true},{"id":"VN13","passed":false,"severe_error":true},
+    {"id":"VN14","passed":true},{"id":"VN15","passed":true},{"id":"VN16","passed":true,"note":"minor spelling errors; semantic meaning retained"},
+    {"id":"VN17","passed":false,"not_evaluable":true},{"id":"VN18","passed":false},{"id":"VN19","passed":false,"severe_error":true},{"id":"VN20","passed":true}
+  ]
+}

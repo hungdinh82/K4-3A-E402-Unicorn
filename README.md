@@ -36,7 +36,7 @@ System audio / microphone
 
 When `GROQ_API_KEY` is available, Vietnamese, English, and Mandarin use Groq's accuracy-first `whisper-large-v3` through the OpenAI-compatible audio transcription API. Without the key, Vietnamese uses local PhoWhisper-medium and English/Mandarin use local Whisper Turbo. Raw ASR text is retained next to cleaned text so term corrections remain auditable.
 
-Enter your Groq API key in **Cài đặt → Groq ASR**. The desktop app stores it in macOS Keychain or Windows Credential Manager and restarts the ASR worker after you save or remove it. Stop recording before changing the key. The key is never saved to notes, localStorage, or the repository. You can alternatively provide it before starting the app:
+Choose **Groq** in **Cài đặt → Tóm tắt & dịch AI** and enter the API key there. The desktop app stores provider keys separately in macOS Keychain or Windows Credential Manager. Updating the Groq key also restarts the ASR worker. Stop recording before changing a key. Keys are never saved to notes, localStorage, or the repository. You can alternatively provide the Groq key before starting the app:
 
 ```bash
 export GROQ_API_KEY="gsk_..."
@@ -45,7 +45,7 @@ export GROQ_API_KEY="gsk_..."
 
 Optional overrides are `ASR_BACKEND=local|groq|auto` (default `auto`), `GROQ_ASR_MODEL` (default `whisper-large-v3`), and `GROQ_BASE_URL`. Never commit the API key to the repository. Groq requests receive mono 16 kHz WAV utterances; silence commits naturally and continuous speech is capped at 10 seconds to improve context and avoid excessive requests.
 
-The summarizer calls the local OpenAI-compatible endpoint at `http://127.0.0.1:20128/v1/chat/completions` using `cx/gpt-5.5`. It separates final decisions, tentative decisions, unresolved topics, action items, open questions, and deferred work. Important items must reference real transcript segment IDs; invalid evidence IDs are removed, and unsupported important items are discarded. The final saved note is regenerated from the full transcript instead of trusting accumulated realtime summaries.
+The summarizer and translator can switch between **9Router** and **Groq** from one provider dropdown. 9Router defaults to the local OpenAI-compatible endpoint at `http://127.0.0.1:20128/v1/chat/completions` with `cx/gpt-5.5`; its endpoint, model ID, and optional dashboard API key are configurable. The key can also be supplied through `NINE_ROUTER_API_KEY`. Groq uses `openai/gpt-oss-120b` with low reasoning effort and a completion budget that leaves room for the final answer. The same securely stored Groq key is reused for ASR without exposing it to React. The summary separates final decisions, tentative decisions, unresolved topics, action items, open questions, and deferred work. Important items must reference real transcript segment IDs; invalid evidence IDs are removed, and unsupported important items are discarded. The final saved note is regenerated from the full transcript instead of trusting accumulated realtime summaries.
 
 Notes are stored in the Tauri application data directory. Existing string-based notes remain readable; newly generated notes additionally store the structured summary and transcript segments.
 

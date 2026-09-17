@@ -15,6 +15,8 @@ use tauri::{Emitter, Manager};
 
 const DEFAULT_SUMMARY_API: &str = "http://127.0.0.1:20128/v1";
 const DEFAULT_SUMMARY_MODEL: &str = "cx/gpt-5.5";
+const GROQ_CHAT_API: &str = "https://api.groq.com/openai/v1";
+const GROQ_GPT_OSS_120B: &str = "openai/gpt-oss-120b";
 
 #[derive(Default)]
 struct NativeState {
@@ -25,52 +27,78 @@ struct NativeState {
     worker_epoch: Arc<AtomicUsize>,
 }
 
-const GROQ_KEY_SERVICE: &str = "local.vietnote.desktop";
+const AI_KEY_SERVICE: &str = "local.vietnote.desktop";
 const GROQ_KEY_ACCOUNT: &str = "groq-asr-api-key";
+const NINE_ROUTER_KEY_ACCOUNT: &str = "9router-api-key";
 
-fn groq_key_entry() -> Result<keyring::Entry, String> {
-    keyring::Entry::new(GROQ_KEY_SERVICE, GROQ_KEY_ACCOUNT)
+fn normalize_ai_provider(provider: &str) -> Result<&'static str, String> {
+    match provider.trim().to_lowercase().as_str() {
+        "local" | "nine_router" => Ok("nine_router"),
+        "groq" => Ok("groq"),
+        _ => Err("Nhà cung cấp AI không hợp lệ".into()),
+    }
+}
+
+fn provider_key_entry(provider: &str) -> Result<keyring::Entry, String> {
+    let account = match normalize_ai_provider(provider)? {
+        "groq" => GROQ_KEY_ACCOUNT,
+        "nine_router" => NINE_ROUTER_KEY_ACCOUNT,
+        _ => unreachable!(),
+    };
+    keyring::Entry::new(AI_KEY_SERVICE, account)
         .map_err(|_| "Không truy cập được kho mật khẩu hệ thống".to_string())
 }
 
-fn stored_groq_key() -> Result<Option<String>, String> {
-    match groq_key_entry()?.get_password() {
+fn stored_provider_key(provider: &str) -> Result<Option<String>, String> {
+    match provider_key_entry(provider)?.get_password() {
         Ok(value) => Ok(Some(value)),
         Err(keyring::Error::NoEntry) => Ok(None),
-        Err(_) => Err("Không đọc được Groq API key từ kho mật khẩu hệ thống".into()),
+        Err(_) => Err("Không đọc được API key từ kho mật khẩu hệ thống".into()),
     }
 }
 
+fn provider_env_key(provider: &str) -> Option<String> {
+    let name = if normalize_ai_provider(provider).ok()? == "groq" { "GROQ_API_KEY" } else { "NINE_ROUTER_API_KEY" };
+    std::env::var(name).ok().filter(|key| !key.trim().is_empty())
+}
+
+fn stored_groq_key() -> Result<Option<String>, String> { stored_provider_key("groq") }
+
 #[tauri::command]
-fn groq_key_status() -> Result<String, String> {
-    if stored_groq_key()?.is_some() { return Ok("saved".into()); }
-    if std::env::var("GROQ_API_KEY").ok().is_some_and(|key| !key.trim().is_empty()) {
-        return Ok("environment".into());
-    }
+fn ai_key_status(provider: String) -> Result<String, String> {
+    let provider = normalize_ai_provider(&provider)?;
+    if stored_provider_key(provider)?.is_some() { return Ok("saved".into()); }
+    if provider_env_key(provider).is_some() { return Ok("environment".into()); }
     Ok("none".into())
 }
 
 #[tauri::command]
-fn set_groq_api_key(app: tauri::AppHandle, state: tauri::State<'_, NativeState>, api_key: Option<String>) -> Result<String, String> {
+fn set_ai_api_key(app: tauri::AppHandle, state: tauri::State<'_, NativeState>, provider: String, api_key: Option<String>) -> Result<String, String> {
     if !state.captures.lock().map_err(|e| e.to_string())?.is_empty() {
-        return Err("Hãy dừng ghi âm trước khi đổi Groq API key".into());
+        return Err("Hãy dừng ghi âm trước khi đổi API key".into());
     }
+    let provider = normalize_ai_provider(&provider)?;
     let key = api_key.unwrap_or_default().trim().to_string();
-    if !key.is_empty() && (!key.starts_with("gsk_") || key.chars().any(char::is_whitespace)) {
+    if !key.is_empty() && key.chars().any(char::is_whitespace) {
+        return Err("API key không được chứa khoảng trắng".into());
+    }
+    if provider == "groq" && !key.is_empty() && !key.starts_with("gsk_") {
         return Err("Groq API key không đúng định dạng (bắt đầu bằng gsk_)".into());
     }
-    let entry = groq_key_entry()?;
+    let entry = provider_key_entry(provider)?;
     if key.is_empty() {
         match entry.delete_credential() {
             Ok(()) | Err(keyring::Error::NoEntry) => (),
-            Err(_) => return Err("Không xóa được Groq API key khỏi kho mật khẩu hệ thống".into()),
+            Err(_) => return Err("Không xóa được API key khỏi kho mật khẩu hệ thống".into()),
         }
     } else {
-        entry.set_password(&key).map_err(|_| "Không lưu được Groq API key vào kho mật khẩu hệ thống")?;
+        entry.set_password(&key).map_err(|_| "Không lưu được API key vào kho mật khẩu hệ thống")?;
     }
-    stop_worker(state.clone())?;
-    start_worker(app, state)?;
-    groq_key_status()
+    if provider == "groq" {
+        stop_worker(state.clone())?;
+        start_worker(app, state)?;
+    }
+    ai_key_status(provider.into())
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -79,10 +107,17 @@ struct StoredNotes { notes: Vec<Value>, groups: Vec<Value> }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-struct SummaryAiConfig { api_url: String, model: String }
+struct SummaryAiConfig {
+    api_url: String,
+    model: String,
+    #[serde(default = "default_summary_provider")]
+    provider: String,
+}
+
+fn default_summary_provider() -> String { "nine_router".into() }
 
 impl Default for SummaryAiConfig {
-    fn default() -> Self { Self { api_url: DEFAULT_SUMMARY_API.into(), model: DEFAULT_SUMMARY_MODEL.into() } }
+    fn default() -> Self { Self { api_url: DEFAULT_SUMMARY_API.into(), model: DEFAULT_SUMMARY_MODEL.into(), provider: default_summary_provider() } }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -141,7 +176,9 @@ fn app_data(app: &tauri::AppHandle) -> Result<PathBuf, String> {
 
 fn summary_ai_config(app: &tauri::AppHandle) -> Result<SummaryAiConfig, String> {
     let path = app_data(app)?.join("summary-ai.json");
-    Ok(fs::read(path).ok().and_then(|data| serde_json::from_slice(&data).ok()).unwrap_or_default())
+    let mut config: SummaryAiConfig = fs::read(path).ok().and_then(|data| serde_json::from_slice(&data).ok()).unwrap_or_default();
+    if config.provider == "local" { config.provider = "nine_router".into(); }
+    Ok(config)
 }
 
 #[tauri::command]
@@ -149,11 +186,22 @@ fn get_summary_ai_config(app: tauri::AppHandle) -> Result<SummaryAiConfig, Strin
 
 #[tauri::command]
 fn set_summary_ai_config(app: tauri::AppHandle, config: SummaryAiConfig) -> Result<SummaryAiConfig, String> {
-    let api_url = config.api_url.trim().trim_end_matches('/').to_string();
+    let provider = normalize_ai_provider(&config.provider)?.to_string();
     let model = config.model.trim().to_string();
-    if !(api_url.starts_with("http://") || api_url.starts_with("https://")) { return Err("API phải bắt đầu bằng http:// hoặc https://".into()); }
     if model.is_empty() { return Err("Tên model không được trống".into()); }
-    let next = SummaryAiConfig { api_url, model };
+    let api_url = match provider.as_str() {
+        "nine_router" => {
+            let url = config.api_url.trim().trim_end_matches('/').to_string();
+            if !(url.starts_with("http://") || url.starts_with("https://")) { return Err("API phải bắt đầu bằng http:// hoặc https://".into()); }
+            url
+        }
+        "groq" => {
+            if model != GROQ_GPT_OSS_120B { return Err("Hiện Groq chỉ được cấu hình sẵn cho openai/gpt-oss-120b".into()); }
+            GROQ_CHAT_API.into()
+        }
+        _ => unreachable!(),
+    };
+    let next = SummaryAiConfig { api_url, model, provider };
     let dir = app_data(&app)?;
     fs::create_dir_all(&dir).map_err(|e| e.to_string())?;
     fs::write(dir.join("summary-ai.json"), serde_json::to_vec(&next).map_err(|e| e.to_string())?).map_err(|e| e.to_string())?;
@@ -372,15 +420,51 @@ fn stop_capture(state: tauri::State<'_, NativeState>) -> Result<(), String> {
     Ok(())
 }
 
-async fn local_completion(app: &tauri::AppHandle, system: &str, user: String, max_tokens: u32) -> Result<String, String> {
+async fn ai_completion(app: &tauri::AppHandle, system: &str, user: String, max_tokens: u32) -> Result<String, String> {
     let config = summary_ai_config(app)?;
     let endpoint = if config.api_url.ends_with("/chat/completions") { config.api_url } else { format!("{}/chat/completions", config.api_url) };
-    let body = json!({"model":config.model, "messages":[{"role":"system","content":system},{"role":"user","content":user}], "max_completion_tokens":max_tokens});
-    let client = reqwest::Client::builder().timeout(Duration::from_secs(45)).build().map_err(|e| e.to_string())?;
-    let response = client.post(endpoint).json(&body).send().await.map_err(|e| e.to_string())?;
-    if !response.status().is_success() { return Err(format!("API local trả về HTTP {}", response.status())); }
+    let is_groq = config.provider == "groq";
+    let body = if is_groq {
+        // GPT-OSS spends completion tokens on reasoning before producing content. Low effort plus
+        // a larger cap prevents short translations from ending with an empty content field.
+        json!({
+            "model": config.model,
+            "messages": [{"role":"user","content":format!("{system}\n\n{user}")}],
+            "max_completion_tokens": max_tokens.saturating_mul(2).max(1024),
+            "reasoning_effort": "low",
+            "include_reasoning": false
+        })
+    } else {
+        json!({"model":config.model, "messages":[{"role":"system","content":system},{"role":"user","content":user}], "max_tokens":max_tokens})
+    };
+    let client = reqwest::Client::builder().timeout(Duration::from_secs(90)).build().map_err(|e| e.to_string())?;
+    let request = client.post(endpoint).json(&body);
+    let response = if is_groq {
+        let key = stored_provider_key("groq").ok().flatten().or_else(|| provider_env_key("groq"))
+            .filter(|key| !key.trim().is_empty())
+            .ok_or("Chưa có Groq API key. Vào Cài đặt để lưu key trước khi dùng GPT-OSS 120B.")?;
+        request.bearer_auth(key).send().await.map_err(|e| format!("Không gọi được Groq: {e}"))?
+    } else {
+        let request = match stored_provider_key("nine_router").ok().flatten().or_else(|| provider_env_key("nine_router")) {
+            Some(key) => request.bearer_auth(key),
+            None => request,
+        };
+        request.send().await.map_err(|e| format!("Không gọi được 9Router: {e}"))?
+    };
+    if !response.status().is_success() {
+        let status = response.status();
+        let detail = response.text().await.unwrap_or_default();
+        let parsed_detail = serde_json::from_str::<Value>(&detail).ok()
+            .and_then(|value| value.pointer("/error/message").and_then(Value::as_str).map(str::to_string))
+            .unwrap_or_else(|| detail.chars().take(300).collect());
+        return Err(format!("{} trả về HTTP {status}: {parsed_detail}", if is_groq { "Groq" } else { "9Router" }));
+    }
     let data: Value = response.json().await.map_err(|e| e.to_string())?;
-    data.pointer("/choices/0/message/content").and_then(Value::as_str).map(str::trim).filter(|text| !text.is_empty()).map(str::to_string).ok_or("Model không trả về nội dung".into())
+    data.pointer("/choices/0/message/content").and_then(Value::as_str).map(str::trim).filter(|text| !text.is_empty()).map(str::to_string)
+        .ok_or_else(|| {
+            let finish = data.pointer("/choices/0/finish_reason").and_then(Value::as_str).unwrap_or("không rõ");
+            format!("Model không trả về nội dung (finish_reason: {finish})")
+        })
 }
 
 fn parse_json_object(text: &str) -> Result<Value, String> {
@@ -444,7 +528,7 @@ QUY TẮC BẮT BUỘC:
 Chỉ trả về một JSON object, không markdown, đúng camelCase schema:
 {"tldr":"string","keyPoints":[{"id":"string","text":"string","evidenceIds":["segment-id"]}],"decisions":[],"tentativeDecisions":[],"unresolvedTopics":[{"id":"string","text":"string","topic":"string","options":["string"],"status":"No final decision","evidenceIds":["segment-id"]}],"actionItems":[{"id":"string","owner":null,"task":"string","deadline":null,"evidenceIds":["segment-id"]}],"openQuestions":[],"deferred":[{"id":"string","text":"string","target":null,"evidenceIds":["segment-id"]}]}"#;
     let user = format!("BẢN NHÁP TRƯỚC (có thể null):\n{previous}\n\nTRANSCRIPT CÓ ID:\n{transcript}");
-    let raw = local_completion(&app, system, user, 1800).await?;
+    let raw = ai_completion(&app, system, user, 1800).await?;
     let value = parse_json_object(&raw)?;
     let summary: MeetingSummary = serde_json::from_value(value).map_err(|error| format!("Summary không đúng schema: {error}"))?;
     Ok(validate_summary(summary, &segments))
@@ -462,7 +546,7 @@ async fn translate_text(app: tauri::AppHandle, text: String, source_language: St
     } else {
         format!("Đoạn ngay trước đó (chỉ dùng làm ngữ cảnh, không dịch lại):\n{previous_context}")
     };
-    local_completion(&app,
+    ai_completion(&app,
         &format!("Bạn là biên tập viên bản ghi và phiên dịch viên từ {source} sang tiếng Việt. Đầu vào là một đoạn ghép từ nhiều kết quả ASR liên tiếp. Hãy dùng toàn bộ ngữ cảnh để sửa các lỗi nhận diện rõ ràng, nối lại câu bị ngắt, thêm dấu câu, rồi dịch cả đoạn sang tiếng Việt tự nhiên. Giữ nguyên tên riêng, số liệu và thuật ngữ chuyên môn. Không bịa nội dung. Chỉ trả về bản dịch tiếng Việt hoàn chỉnh của ĐOẠN CẦN DỊCH; không dịch lại ngữ cảnh và không giải thích."),
         format!("{context}\n\nĐOẠN CẦN DỊCH:\n{text}"),
         300,
@@ -487,7 +571,7 @@ fn open_permission(kind: String) -> Result<(), String> {
 pub fn run() {
     tauri::Builder::default()
         .manage(NativeState::default())
-        .invoke_handler(tauri::generate_handler![load_notes, save_notes, get_summary_ai_config, set_summary_ai_config, groq_key_status, set_groq_api_key, start_worker, stop_worker, send_worker, start_capture, stop_capture, summarize_segments, translate_text, open_permission])
+        .invoke_handler(tauri::generate_handler![load_notes, save_notes, get_summary_ai_config, set_summary_ai_config, ai_key_status, set_ai_api_key, start_worker, stop_worker, send_worker, start_capture, stop_capture, summarize_segments, translate_text, open_permission])
         .on_window_event(|window, event| {
             if matches!(event, tauri::WindowEvent::Destroyed) {
                 let state = window.app_handle().state::<NativeState>();

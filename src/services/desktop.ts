@@ -3,7 +3,8 @@ import { listen, type UnlistenFn } from '@tauri-apps/api/event'
 import type { AudioInput, Language, MeetingNote, NoteGroup, StructuredMeetingSummary, TranscriptSegment, WorkerMessage } from './types'
 
 export interface StoredNotes { notes: MeetingNote[]; groups: NoteGroup[] }
-export interface SummaryAiConfig { apiUrl: string; model: string }
+export type SummaryAiProvider = 'nine_router' | 'groq'
+export interface SummaryAiConfig { apiUrl: string; model: string; provider: SummaryAiProvider }
 const isDesktop = '__TAURI_INTERNALS__' in window
 let saveQueue: Promise<void> = Promise.resolve()
 
@@ -17,8 +18,8 @@ export const desktop = {
   getSummaryAiConfig: () => invoke<SummaryAiConfig>('get_summary_ai_config'),
   setSummaryAiConfig: (config: SummaryAiConfig) => invoke<SummaryAiConfig>('set_summary_ai_config', { config }),
   startWorker: () => invoke<void>('start_worker'),
-  groqKeyStatus: () => invoke<'saved' | 'environment' | 'none'>('groq_key_status'),
-  setGroqApiKey: (apiKey: string | null) => invoke<'saved' | 'environment' | 'none'>('set_groq_api_key', { apiKey }),
+  aiKeyStatus: (provider: SummaryAiProvider) => invoke<'saved' | 'environment' | 'none'>('ai_key_status', { provider }),
+  setAiApiKey: (provider: SummaryAiProvider, apiKey: string | null) => invoke<'saved' | 'environment' | 'none'>('set_ai_api_key', { provider, apiKey }),
   stopWorker: () => invoke<void>('stop_worker'),
   sendWorker: (payload: Record<string, unknown>) => invoke<void>('send_worker', { payload }),
   startCapture: (source: AudioInput) => invoke<void>('start_capture', { source }),
