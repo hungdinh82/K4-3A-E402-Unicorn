@@ -1,0 +1,14 @@
+.venv/
+.cache/
+build/
+logs/
+__pycache__/
+*.pyc
+.DS_Store
+.env
+.env.*
+!.env.example
+node_modules/
+dist/
+src-tauri/target/
+*.tsbuildinfo
