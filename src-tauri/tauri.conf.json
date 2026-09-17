@@ -1,0 +1,22 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "VietNote",
+  "version": "0.2.0",
+  "identifier": "local.vietnote.desktop",
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "devUrl": "http://127.0.0.1:1420",
+    "beforeBuildCommand": "npm run build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [{ "title": "VietNote", "width": 1280, "height": 820, "minWidth": 1000, "minHeight": 680, "backgroundColor": "#17142a" }],
+    "security": { "csp": null }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "macOS": { "minimumSystemVersion": "15.0", "infoPlist": "Info.plist" },
+    "resources": ["../asr", "../voices"]
+  }
+}

@@ -1,0 +1,4 @@
+numpy>=1.26,<3
+faster-whisper>=1.2,<2
+openai>=2,<3
+zerotts==0.1.5
