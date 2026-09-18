@@ -8,10 +8,10 @@
 
 | Họ và Tên | Mã Học Viên | Vai trò chính | Phần việc đảm nhiệm trong dự án |
 |---|---|---|---|
-| Đinh Văn Hùng | 2A202602443 | Nhóm trưởng | *Bổ sung sau* |
-| Nguyễn Thanh Phong | 2A202602843 | Thành viên | *Bổ sung sau* |
-| Lê Hoàng Thiên Phú | 2A202602908 | Thành viên | *Bổ sung sau* |
-| Nguyễn Quốc Cường | 2A202602886 | Thành viên | *Bổ sung sau* |
+| Đinh Văn Hùng | 2A202602443 | Nhóm trưởng | Điều phối; evidence/mining; tổng hợp spec, acceptance report và quality bar |
+| Nguyễn Thanh Phong | 2A202602843 | Thành viên | Đề xuất ý tưởng; phát triển MVP, ASR/summary realtime và UI/UX |
+| Lê Hoàng Thiên Phú | 2A202602908 | Thành viên | Nghiên cứu người dùng; khảo sát/willing user; test case và chuẩn bị slide |
+| Nguyễn Quốc Cường | 2A202602886 | Thành viên | Spec; prompt, schema và eval; quality bar/evidence validation |
 
 ### Willing user cho CP5
 

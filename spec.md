@@ -177,13 +177,14 @@ _Hình 1. Workflow từ thu âm, tạo transcript, phân loại nội dung, ki�
 | Code/integration | Lê Hoàng Thiên Phú — 2A202602908 |
 | Demo + validation | Nguyễn Thanh Phong — 2A202602843  |
 
-- Willing users: Nguyễn Ngọc Vĩnh (2A202602833) và Vũ Đức Minh (2A202602895), đều sẵn sàng thử sản phẩm ở CP5.
+- Willing users đã chốt cho validation: Nguyễn Ngọc Vĩnh (2A202602833), Vũ Đức Minh (2A202602895), NGUYỄN VIỆT HOÀNG (02424), NGUYỄN QUANG HUY (02421) và NGUYỄN TẤT ĐẠT (02578). Hai người đầu là willing user đã khai từ CP1; cả 5 người vẫn cần hoàn thành phiên dùng thử và log quote/quan sát thực tế.
 - Điều phối/tổng hợp: Đinh Văn Hùng — 2A202602443 (Nhóm trưởng).
 - Phương thức phân công: bốc ngẫu nhiên 5 hạng mục chỉ trong 4 thành viên chính; Nguyễn Quốc Cường nhận 2 hạng mục. Hai willing users không nằm trong phân công nội bộ, chỉ tham gia thử sản phẩm/validation ở CP5.
-- Kế hoạch validation: mỗi người chạy cùng VN01–VN20 trong một meeting, ghi backend/model, transcript, summary, evidence, severe error và latency; không đọc lại câu nếu ASR nhận sai trong lượt đo.
+- Kế hoạch validation: 5 người ngoài nhóm chạy cùng VN01–VN20 trong một meeting, ghi backend/model, transcript, summary, evidence, severe error và latency; không đọc lại câu nếu ASR nhận sai trong lượt đo. Nhật ký phải có task, chỗ kẹt, quote nguyên văn và quyết định của nhóm. Nhật ký và kịch bản thao tác: [validation/validation-log.md](validation/validation-log.md).
+- Dữ liệu form trải nghiệm bổ sung: n=5, dùng backend local trong khoảng 18:00–21:00 ngày 17/09/2026; UI 4,4/5, transcript 3,8/5, dịch 3,8/5, summary hữu ích/rất hữu ích 5/5, yên tâm dữ liệu 3,6/5, sẵn sàng dùng 7,4/10. Đây là self-report chưa có tên/mã số và chưa thay thế log quan sát/quote nguyên văn.
 - Multi-prototype: chưa thực hiện. Nếu làm, so sánh hai trục: (A) summary realtime tối giản với ít phân loại và (B) structured summary evidence-first; chọn B nếu tỷ lệ evidence hợp lệ và decision safety đạt quality bar mà latency vẫn chấp nhận được.
 - Kế hoạch trước CP6:
-  1. Xác nhận tên nhóm Unicorn, Zone C4 và người phụ trách từng hạng mục; đã có đủ ≥2 willing users.
+  1. Xác nhận tên nhóm Unicorn, Zone C4 và người phụ trách từng hạng mục; đã chốt đủ 5 người ngoài nhóm cho R6, trong đó 2 người khai từ CP1.
   2. Bổ sung research log cho ≥2 sản phẩm tương tự.
   3. Chạy lại VN09, VN13, VN17 bằng local và/hoặc Groq; chạy VN17 với nguồn `Both`; lưu kết quả JSON và video public/Drive.
   4. Sửa lỗi nhận diện `README`, `Groq/gsk`, phân loại VN19 và export evidence timestamp; bổ sung regression case tương ứng.
@@ -194,6 +195,9 @@ _Hình 1. Workflow từ thu âm, tạo transcript, phân loại nội dung, ki�
 
 | Thời điểm | Đổi gì | Vì sao (trỏ về feedback/case nào) |
 |---|---|---|
+| 18/09/2026 | Bổ sung 5 phản hồi form trải nghiệm vào `validation/validation-log.md` với các điểm trung bình và vấn đề dịch chưa tự nhiên | Có dữ liệu thật n=5 từ ngày 17/09; ghi rõ đây là self-report, không nhầm với quote hoặc quan sát trực tiếp |
+| 18/09/2026 | Mở rộng validation log thành đủ 5 slot người dùng ngoài nhóm, thêm yêu cầu quote nguyên văn, quyết định sau phiên và bảng changelog | Đối chiếu sổ tay Hackathon K4 §R6: cần 5 người ngoài nhóm, trong đó 2 người khai từ CP1; không điền dữ liệu giả khi chưa thử thực tế |
+| 17/09/2026 | Tạo `validation/validation-log.md` với task, câu hỏi quan sát và bảng log cho Nguyễn Ngọc Vĩnh và Vũ Đức Minh | Chuẩn bị vòng validation CP5; chưa điền quote/quan sát khi chưa có phiên thử thực tế |
 | 17/09/2026 | Bổ sung nghiên cứu Otter.ai vào §3, gồm flow, điểm đáng học, điểm cần né và khác biệt của VietNote | Hoàn thiện phần giải pháp tương tự theo yêu cầu của spec; nhấn mạnh bài học từ lỗi VN09, VN13 và VN19 về owner, credential và phân loại/evidence |
 | 17/09/2026 | Tạo spec cho lát cắt structured meeting summary có evidence, dựa trên pipeline ASR hiện tại | Cần chốt quality bar trước CP4; repo đã có acceptance 20 case và validation evidence nhưng chưa có spec hợp nhất. |
 | 17/09/2026 | Chốt quality bar ≥16/20 và 0 severe error | Lấy nguyên văn ngưỡng MVP trong `eval/VietNote_ACCEPTANCE_TESTS.md`; giữ nguyên sau CP4. |
