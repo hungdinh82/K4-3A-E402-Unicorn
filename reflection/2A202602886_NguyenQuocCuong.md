@@ -2,20 +2,22 @@
 
 - **Mã học viên:** 2A202602886
 - **Nhóm:** Unicorn — Zone C4
-- **Vai trò:** Spec; Prompt + schema/eval, theo [spec.md §8](../spec.md#8-phân-công--kế-hoạch).
+- **Vai trò:** Spec và eval; quality bar/evidence validation.
 - **Dự án:** VietNote — Ghi chú cuộc họp có bằng chứng.
 
 > Bản nháp reflection được tổng hợp từ phân công và tài liệu trong repo. Tôi cần rà soát phần đóng góp và nhận xét cá nhân trước khi nộp; kết quả kiểm thử dưới đây là kết quả được nhóm ghi nhận, không khẳng định tôi trực tiếp thực hiện mọi lượt chạy.
 
 ## 1. Tôi đã làm gì
 
-Theo phân công, tôi phụ trách hai phần liên quan trực tiếp đến nhau: đặc tả sản phẩm và prompt/schema/eval. Trọng tâm trách nhiệm của tôi là làm rõ hệ thống được phép kết luận điều gì từ transcript, cách thể hiện khi chưa đủ căn cứ và tiêu chí để nhóm đánh giá một đầu ra là đạt hay không đạt.
+Tôi phụ trách spec và eval, đồng thời làm rõ quality bar và kiểm chứng evidence. Trọng tâm trách nhiệm của tôi là đặc tả hệ thống được phép kết luận điều gì từ transcript, xây dựng tiêu chí đánh giá đầu ra và đối chiếu kết quả với bằng chứng trước khi kết luận sản phẩm đạt hay không đạt.
 
 Ở phần **spec**, phạm vi tôi phụ trách gồm lát cắt ghi chú cuộc họp có bằng chứng, các non-goals, mức tự động hóa, hành vi khi sai và quality bar. Các nội dung này được thể hiện tại [spec.md §4–§7](../spec.md). Quyết định quan trọng là không để hệ thống tự đoán người phụ trách, deadline hoặc biến một đề xuất thành quyết định đã được nhóm thống nhất.
 
-Ở phần **prompt và schema**, tôi chịu trách nhiệm về yêu cầu phân biệt `decision`, `tentative decision`, `unresolved`, `action` và `deferred`; kết luận quan trọng phải gắn được với segment transcript làm căn cứ. Mục tiêu không chỉ là tạo bản tóm tắt dễ đọc, mà còn giữ đúng trạng thái của thông tin và cho người dùng kiểm tra lại. Đây là phạm vi trách nhiệm theo spec; bản reflection này không coi mô tả yêu cầu là bằng chứng tôi đã hoàn tất triển khai prompt hoặc validator.
-
 Ở phần **eval**, tài liệu để đối chiếu là [bộ 20 case](../eval/vietnote_acceptance_cases.json), [tiêu chí acceptance](../eval/VietNote_ACCEPTANCE_TESTS.md) và [báo cáo chi tiết v1.1](../eval/reports/vietnote_acceptance_report_2026-09-17_v1.1_detailed.md). Một case chỉ đạt khi transcript giữ đúng thông tin quan trọng, summary phân loại đúng và evidence đáp ứng yêu cầu. Tỷ lệ qua bộ phải được đọc cùng điều kiện không có lỗi nghiêm trọng.
+
+Ở phần **quality bar**, tôi phụ trách tiêu chí nghiệm thu: ít nhất 16/20 case đạt và không có lỗi nghiêm trọng theo [spec.md §7](../spec.md#7-kiểm-thử). Tôi cần phân biệt đạt ngưỡng tỷ lệ với đạt đầy đủ điều kiện chất lượng, giữ nguyên chuẩn đã khóa và ghi rõ lý do khi kết quả chưa đạt.
+
+Ở phần **evidence validation**, tôi đối chiếu kết luận trong báo cáo với từng case và bằng chứng được lưu; chú ý VN17 về điều kiện kiểm thử hai nguồn âm thanh và VN19 về phân loại quyết định, evidence timestamp. Tôi cũng tham gia chuẩn hóa tài liệu [feedback-log.md](../validation/feedback-log.md), phân biệt kết quả acceptance, phản hồi người dùng và những kết luận chưa đủ căn cứ. Phần trách nhiệm này là kiểm chứng bằng chứng và tiêu chí, không đồng nghĩa tôi trực tiếp triển khai toàn bộ validator hoặc thực hiện mọi phiên validation.
 
 Theo phân công chung, Hùng phụ trách evidence/mining, Phú phụ trách code/integration, Phong phụ trách demo/validation. Phần tôi cần bàn giao cho các bạn là yêu cầu rõ ràng và tiêu chí kiểm tra được; các kết quả triển khai và kiểm thử là đầu ra chung của nhóm.
 
@@ -27,11 +29,9 @@ Giới hạn tôi cần giữ là không coi phần AI viết thành bằng ch�
 
 ## 2. Điều tôi học được
 
-**Một con số tổng hợp chưa đủ để kết luận sản phẩm đạt.** Spec ghi kết quả 16/20, trong khi báo cáo chi tiết v1.1 ghi 15/20, tương ứng 75%, với năm case trượt: VN09, VN13, VN17, VN18 và VN19. Báo cáo chi tiết có thêm lỗi VN18: `sprint` bị nhận thành `screen`. Cả hai cách ghi hiện tại đều chưa chứng minh đạt quality bar vì vẫn còn lỗi nghiêm trọng. Với vai trò phụ trách spec/eval, tôi rút ra rằng mỗi con số cần trỏ tới một lượt chạy và bảng chấm cụ thể; không nên chọn con số tốt hơn khi tài liệu chưa thống nhất.
-
 **Case VN19 cho thấy phân loại sai có thể làm thay đổi ý nghĩa công việc.** Đầu vào của case là một quyết định giữ phạm vi microphone và tiếng Việt, nhưng báo cáo ghi kết quả bị đưa vào `Tentative Decision`, đồng thời bản export thiếu evidence timestamp. Lỗi này vừa làm giảm mức chắc chắn của quyết định đã chốt, vừa khiến người dùng khó kiểm chứng nguồn. Vì vậy, eval phải kiểm tra cả nhãn, nội dung và khả năng truy về bằng chứng, thay vì chỉ nhìn bản tóm tắt có nhắc đúng chủ đề hay không.
 
-Từ VN19, hướng cải thiện prompt cần dựa trên ngữ cảnh xác nhận đầy đủ, không chỉ gặp từ “quyết định” là gắn nhãn. Tôi cần kiểm tra cả trường hợp khẳng định, phủ định và trích dẫn để tránh sửa được một case nhưng làm sai các case khác. Ngoài ra, evidence ID tồn tại mới chỉ là điều kiện cần; đoạn được dẫn còn phải thực sự hỗ trợ kết luận và người dùng phải mở được nó.
+Từ VN19, tôi cần làm rõ tiêu chí phân loại trong spec và bổ sung eval dựa trên ngữ cảnh xác nhận đầy đủ, không chỉ gặp từ “quyết định” là gắn nhãn. Tôi cần kiểm tra cả trường hợp khẳng định, phủ định và trích dẫn, rồi bàn giao lỗi cùng expected behavior cho người phụ trách triển khai để tránh sửa được một case nhưng làm sai các case khác. Ngoài ra, evidence ID tồn tại mới chỉ là điều kiện cần; đoạn được dẫn còn phải thực sự hỗ trợ kết luận và người dùng phải mở được nó.
 
 **Thiết lập test cũng là một phần của chất lượng phép đo.** VN17 cần kiểm tra cả microphone và system audio, nhưng báo cáo chỉ ghi nhận nguồn `System audio`. Kết quả đó chưa chứng minh được khả năng tách hai nguồn. Tôi cần phân biệt lỗi sản phẩm với trường hợp chưa kiểm thử đúng điều kiện, đồng thời giữ lại trạng thái chưa được chứng minh thay vì tự tính là đạt.
 
@@ -43,7 +43,7 @@ Khả năng tái hiện lượt chạy cũng còn hạn chế: báo cáo v1.1 ch
 
 Bộ test đã có các tình huống phủ định, đề xuất, deadline và evidence, nhưng phần eval cần thể hiện rõ hơn nguồn gốc case, độ phủ bốn lớp khó và kết quả hai người chấm độc lập. Những câu giả lập dùng để kiểm tra hành vi không thay thế bằng chứng người dùng gặp pain thật.
 
-Về đóng góp cá nhân, repo chưa có nhật ký đủ chi tiết để xác định từng prompt, từng thay đổi schema hoặc lượt chấm do tôi trực tiếp thực hiện. Tôi cần bổ sung liên kết commit hoặc log tương ứng khi có, thay vì gộp toàn bộ thành quả của nhóm thành phần việc cá nhân.
+Về đóng góp cá nhân, repo chưa có nhật ký đủ chi tiết để xác định từng thay đổi spec, từng case eval hoặc lượt chấm và kiểm chứng evidence do tôi trực tiếp thực hiện. Tôi cần bổ sung liên kết commit hoặc log tương ứng khi có, thay vì gộp toàn bộ thành quả của nhóm thành phần việc cá nhân.
 
 ## 4. Nếu có thêm một tuần
 
@@ -54,7 +54,7 @@ Về đóng góp cá nhân, repo chưa có nhật ký đủ chi tiết để xá
 
 ## 5. Bài học cho lần sau
 
-Lần sau, tôi sẽ tổ chức phần spec, prompt và eval thành một chuỗi có thể kiểm tra: yêu cầu → case → đầu ra thực tế → kết quả chấm → quyết định sửa. Mỗi thay đổi prompt/schema cần có phiên bản, case giải thích lý do và kết quả chạy lại toàn bộ bộ test.
+Lần sau, tôi sẽ tổ chức phần spec, eval và evidence validation thành một chuỗi có thể kiểm tra: yêu cầu → case → đầu ra thực tế → evidence → kết quả đối chiếu quality bar → quyết định sửa. Mỗi thay đổi của hệ thống cần gắn với phiên bản, case giải thích lý do và kết quả chạy lại toàn bộ bộ test; thay đổi tiêu chí chấm phải có changelog và không được dùng để hạ quality bar đã khóa.
 
-Bài học quan trọng nhất đối với tôi là người phụ trách spec/eval phải làm rõ cả giới hạn của kết luận. Một bản tóm tắt trôi chảy, một evidence ID tồn tại hoặc một tỷ lệ đạt 80% đều chưa đủ nếu người dùng vẫn có thể hiểu sai quyết định. Tôi cần giải thích được vì sao một case đạt, vì sao một case trượt và bằng chứng nào hỗ trợ cách đánh giá đó.
+Bài học quan trọng nhất đối với tôi là người phụ trách spec, eval, quality bar và evidence validation phải làm rõ cả giới hạn của kết luận. Một bản tóm tắt trôi chảy, một evidence ID tồn tại hoặc một tỷ lệ đạt 80% đều chưa đủ nếu người dùng vẫn có thể hiểu sai quyết định. Tôi cần giải thích được vì sao một case đạt, vì sao một case trượt và bằng chứng nào hỗ trợ cách đánh giá đó.
 
