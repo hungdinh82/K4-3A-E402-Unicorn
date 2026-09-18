@@ -1,0 +1,51 @@
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { ChevronDown, Grid2X2, Folder, PlusCircle, SquarePen, Clock3, Trash2, MoreHorizontal } from 'lucide-react'
+import type { AppModel } from '../hooks/useAppModel'
+import { formatTime, noteInScope, noteMoments } from '../services/notes'
+import { NoteMomentCard } from '../components/NoteMomentCard'
+import { StructuredMeetingSummaryView } from '../components/StructuredMeetingSummary'
+
+export function NotesPage({ model }: { model: AppModel }) {
+  const [scope, setScope] = useState('all')
+  const [search, setSearch] = useState('')
+  const [selectedID, setSelectedID] = useState<string | null>(null)
+  const [editMode, setEditMode] = useState(false)
+  const [groupMenu, setGroupMenu] = useState<string | null>(null)
+  const [dialog, setDialog] = useState<'createGroup' | 'renameGroup' | 'deleteGroup' | 'renameNote' | 'deleteNote' | null>(null)
+  const [dialogID, setDialogID] = useState<string | null>(null)
+  const [dialogValue, setDialogValue] = useState('')
+  const [dialogError, setDialogError] = useState('')
+  const [highlightedEvidence, setHighlightedEvidence] = useState<string[]>([])
+  const transcriptDetails = useRef<HTMLDetailsElement>(null)
+  const visible = useMemo(() => model.notes.filter(note => noteInScope(note, scope, model.noteGroups) && (!search || [note.title, note.summary, note.transcript].some(value => value.toLocaleLowerCase().includes(search.toLocaleLowerCase())))).sort((a,b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()), [model.notes, model.noteGroups, scope, search])
+  const selected = visible.find(note => note.id === selectedID) ?? visible[0]
+  useEffect(() => { setEditMode(false); setHighlightedEvidence([]) }, [selected?.id])
+  const showEvidence = (ids: string[]) => {
+    setHighlightedEvidence(ids)
+    if (transcriptDetails.current) transcriptDetails.current.open = true
+    requestAnimationFrame(() => document.getElementById(`transcript-${ids[0]}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' }))
+  }
+  const evidenceLabel = (id: string) => {
+    const segment = selected?.transcriptSegments?.find(item => item.id === id)
+    return segment ? formatTime(segment.timestamp, false) : undefined
+  }
+  const openDialog = (kind: typeof dialog, id: string | null = null, value = '') => { setDialog(kind); setDialogID(id); setDialogValue(value); setDialogError(''); setGroupMenu(null) }
+  const submitDialog = () => {
+    if (dialog === 'createGroup') { const id = model.createGroup(dialogValue); if (!id) { setDialogError('Tên nhóm không được trống hoặc trùng.'); return } setScope(id); setSelectedID(null) }
+    if (dialog === 'renameGroup' && dialogID && !model.renameGroup(dialogID, dialogValue)) { setDialogError('Tên nhóm không được trống hoặc trùng.'); return }
+    if (dialog === 'deleteGroup' && dialogID) { model.deleteGroup(dialogID); if (scope === dialogID) setScope('all'); setSelectedID(null) }
+    if (dialog === 'renameNote' && dialogID) { if (!dialogValue.trim()) { setDialogError('Tên cuộc họp không được trống.'); return } model.updateNote(dialogID, { title: dialogValue.trim() }) }
+    if (dialog === 'deleteNote' && dialogID) { model.deleteNote(dialogID); setSelectedID(null) }
+    setDialog(null)
+  }
+  const addNote = () => { const id = model.newNote(scope !== 'all' ? scope : null); setSearch(''); setSelectedID(id) }
+  return <main className="notes-page animate-in"><div className="eyebrow">KHÔNG GIAN GHI CHÚ</div><h1>Ghi chú cuộc họp</h1>
+    <div className="note-category-bar"><div className="category-scroll"><button className={`category-pill ${scope === 'all' ? 'selected' : ''}`} onClick={() => { setScope('all'); setSelectedID(null) }}><Grid2X2 size={17}/>Tất cả <small>{model.notes.length}</small></button><span className="category-separator"/>{model.noteGroups.map(group => <div className="category-group" key={group.id}><button className={`category-pill ${scope === group.id ? 'selected' : ''}`} onClick={() => { setScope(group.id); setSelectedID(null) }}><Folder size={17}/>{group.name}<small>{model.notes.filter(note => note.groupID === group.id).length}</small></button><button className="group-menu-button" aria-label={`Tùy chọn nhóm ${group.name}`} onClick={() => setGroupMenu(groupMenu === group.id ? null : group.id)}><MoreHorizontal size={17}/></button>{groupMenu === group.id && <div className="group-popover"><button onClick={() => openDialog('renameGroup', group.id, group.name)}>Đổi tên</button><button onClick={() => openDialog('deleteGroup', group.id)}>Xóa nhóm</button></div>}</div>)}</div><button className="add-group" aria-label="Tạo nhóm ghi chú" title="Tạo nhóm" onClick={() => openDialog('createGroup')}><PlusCircle size={21} fill="currentColor"/></button></div>
+    <div className="notes-columns"><section className="glass-card notes-list-panel"><div className="notes-list-heading"><h3>Ghi chú</h3><button aria-label="Tạo ghi chú" title="Tạo ghi chú" onClick={addNote}><SquarePen size={18}/></button></div><input className="note-search" placeholder="Tìm ghi chú…" value={search} onChange={e => setSearch(e.target.value)}/><div className="notes-list-scroll">{visible.map(note => { const overview = noteMoments(note.summary)[0]?.overview[0] ?? (note.summary || 'Chưa có nội dung'); return <button key={note.id} className={`note-list-item ${selected?.id === note.id ? 'selected' : ''}`} onClick={() => setSelectedID(note.id)}><div><strong>{note.title || 'Chưa có tiêu đề'}</strong>{note.isDemo && <small>MẪU</small>}</div><p>{overview}</p><time>{formatTime(note.updatedAt)}</time></button> })}{visible.length === 0 && <p className="muted empty-list">Không tìm thấy ghi chú. Tạo ghi chú mới hoặc chọn nhóm khác.</p>}</div></section>
+      {selected ? <section className="glass-card strong note-editor" key={selected.id}><div className="note-editor-scroll">{selected.isDemo ? <><small className="accent-text">Ghi chú mẫu · chỉ đọc</small><h2>{selected.title}</h2></> : <><div className="note-title-row"><h2>{selected.title || 'Chưa có tiêu đề'}</h2><button className="pill-btn" onClick={() => openDialog('renameNote', selected.id, selected.title)}><SquarePen size={15}/>Đổi tên</button><button className="pill-btn" onClick={() => openDialog('deleteNote', selected.id)}><Trash2 size={15}/>Xóa</button></div><div className="note-group-row"><span>Nhóm</span><div className="meeting-choice note-group-choice"><Folder size={15}/><select aria-label="Nhóm" value={selected.groupID ?? ''} onChange={e => model.updateNote(selected.id, { groupID: e.target.value || null })}><option value="">Tất cả</option>{model.noteGroups.map(group => <option key={group.id} value={group.id}>{group.name}</option>)}</select><ChevronDown size={16}/></div><small>Tự động lưu</small></div></>}
+        <div className="note-date">{formatTime(selected.createdAt)}{selected.duration > 0 && ` · ${Math.floor(selected.duration / 60)} phút`}</div><div className="divider"/><div className="note-content-heading"><h3>Nội dung ghi chú</h3>{!selected.isDemo && <div className="segmented"><button className={!editMode ? 'selected' : ''} onClick={() => setEditMode(false)}>Xem</button><button className={editMode ? 'selected' : ''} onClick={() => setEditMode(true)}>Chỉnh sửa</button></div>}</div>
+        {editMode && !selected.isDemo ? <textarea className="note-textarea" value={selected.summary} onChange={e => model.updateNote(selected.id, { summary: e.target.value })} aria-label="Nội dung ghi chú"/> : selected.structuredSummary ? <StructuredMeetingSummaryView summary={selected.structuredSummary} onEvidence={showEvidence} evidenceLabel={evidenceLabel}/> : <div className="note-moments">{noteMoments(selected.summary).length ? <><div className="moments-caption"><Clock3 size={15}/>{noteMoments(selected.summary).length} mốc nội dung<span>Nhấn vào từng mốc để xem chi tiết</span></div>{noteMoments(selected.summary).map(moment => <NoteMomentCard key={`${selected.id}-${moment.id}`} moment={moment} defaultOpen={moment.id === 0}/>)}</> : <div className="empty-note"><SquarePen size={26}/><h3>Chưa có nội dung</h3><p>Chọn Chỉnh sửa để thêm ghi chú cho cuộc họp này.</p></div>}</div>}
+        <div className="divider"/><details className="transcript-disclosure" ref={transcriptDetails}><summary>Transcript gốc · chỉ đọc</summary>{selected.transcriptSegments?.length ? <div className="saved-transcript">{selected.transcriptSegments.map(segment => <article id={`transcript-${segment.id}`} key={segment.id} className={highlightedEvidence.includes(segment.id) ? 'evidence-highlight' : ''}><small>{formatTime(segment.timestamp, false)} · {segment.audioSource === 'microphone' ? 'Microphone' : 'System audio'}</small><p>{segment.cleanText}</p>{segment.rawText !== segment.cleanText && <small className="raw-transcript">ASR gốc: {segment.rawText}</small>}</article>)}</div> : <p>{selected.transcript || 'Ghi chú này không có transcript.'}</p>}</details></div></section> : <section className="glass-card strong note-empty">Chọn hoặc tạo ghi chú để bắt đầu.</section>}
+    </div>{dialog && <div className="dialog-backdrop" onMouseDown={event => { if (event.target === event.currentTarget) setDialog(null) }}><form className="app-dialog" role="dialog" aria-modal="true" aria-label={dialog === 'deleteNote' ? 'Xóa cuộc họp' : dialog === 'deleteGroup' ? 'Xóa nhóm' : dialog === 'createGroup' ? 'Tạo nhóm' : 'Đổi tên'} onSubmit={event => { event.preventDefault(); submitDialog() }}><h2>{dialog === 'createGroup' ? 'Tạo nhóm ghi chú' : dialog === 'renameGroup' ? 'Đổi tên nhóm' : dialog === 'renameNote' ? 'Đổi tên cuộc họp' : dialog === 'deleteNote' ? 'Xóa cuộc họp?' : 'Xóa nhóm?'}</h2>{dialog === 'deleteNote' ? <p>Cuộc họp này sẽ bị xóa vĩnh viễn.</p> : dialog === 'deleteGroup' ? <p>Ghi chú trong nhóm vẫn còn ở Tất cả.</p> : <label className="field"><span>{dialog === 'renameNote' ? 'TÊN CUỘC HỌP' : 'TÊN NHÓM'}</span><input autoFocus value={dialogValue} onChange={event => setDialogValue(event.target.value)} required/></label>}{dialogError && <p className="dialog-error">{dialogError}</p>}<div className="dialog-actions"><button type="button" className="pill-btn" onClick={() => setDialog(null)}>Hủy</button><button type="submit" className="pill-btn primary">{dialog === 'deleteNote' || dialog === 'deleteGroup' ? 'Xóa' : 'Lưu'}</button></div></form></div>}
+  </main>
+}

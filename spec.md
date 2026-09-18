@@ -19,8 +19,8 @@ _Hình 1. Workflow từ thu âm, tạo transcript, phân loại nội dung, ki�
   - Pipeline hiện có 21 test tự động bao phủ VAD, lọc hallucination, deduplication, chọn model/ngôn ngữ, protocol socket, Groq adapter và tách context hai nguồn (`ASR_QUALITY_REPORT.md`, §8; `eval/test_pipeline.py`).
   - Mẫu meeting tổng hợp cho thấy PhoWhisper giữ được trạng thái khảo sát, số liệu và action item; latency ASR trung bình khoảng 2,23 giây/segment và end-to-end khoảng 5,3–5,6 giây (`ASR_QUALITY_REPORT.md`, §7.2).
   - Golden set 20 câu đã có sẵn tại `eval/vietnote_acceptance_cases.json`; tiêu chí trượt ngay gồm bịa quyết định, đảo phủ định, đổi số liệu/ngày, gán sai người hoặc trỏ sai evidence (`eval/VietNote_ACCEPTANCE_TESTS.md`).
-  - Acceptance run v1.1: đã thử 20 câu, đạt 16 câu, chưa đạt 4 câu, tỷ lệ 80%; đạt ngưỡng số lượng MVP nhưng chưa đạt quality bar đầy đủ vì còn lỗi nghiêm trọng (`VietNote Acceptance Report — v1.1 câu đơn giản`, do nhóm cung cấp ngày 17/09/2026).
-- ≥5 quote/ví dụ nguyên văn + nguồn:
+  - Acceptance run v1.1: đã thử 20 câu, đạt 15 câu, chưa đạt 5 câu, tỷ lệ 75%; chưa đạt ngưỡng số lượng MVP và còn 2 lỗi nghiêm trọng (`VietNote Acceptance Report — v1.1 câu đơn giản`, do nhóm cung cấp ngày 17/09/2026).
+- Ví dụ nguyên văn từ golden test, không phải quote người dùng:
   1. “Khảo sát chưa hoàn tất.” — `eval/vietnote_acceptance_cases.json`, VN16; kiểm tra câu ngắn.
   2. “Hiện có 86 trên 120 phản hồi, còn thiếu 34 phản hồi.” — file trên, VN02; kiểm tra số liệu.
   3. “Lan gửi báo cáo tổng hợp trước 10 giờ sáng thứ Sáu.” — file trên, VN03; kiểm tra owner/deadline.
@@ -28,6 +28,14 @@ _Hình 1. Workflow từ thu âm, tạo transcript, phân loại nội dung, ki�
   5. “Tôi đề xuất dùng microphone trước, nhưng nhóm chưa chốt.” — file trên, VN08; kiểm tra proposal không bị biến thành decision.
   6. “Không bật TTS trong cuộc họp này và không gửi audio lên server local.” — file trên, VN12; kiểm tra phủ định kép.
   7. “Microphone nói dùng tiếng Việt; system audio nói giữ nguyên tên sản phẩm VietNote.” — file trên, VN17; kiểm tra tách nguồn.
+- Quote nguyên văn từ validation người dùng:
+  1. “App có UI khá đẹp, màu sắc và animation rất tốt, app dễ dùng.”
+  2. “Tính năng khá hay và thật sự có nhu cầu.”
+  3. “Liệu có thể tạo thành chatbot cho discord không”
+  4. “Hiện tại Notion cũng có chức năng tương tự thì sao”
+  5. “Có đảm bảo tính bảo mật dữ liệu không”
+  6. “Người dùng hỏi bạn dùng gì để xử lý audio tiếng việt đầu vào”
+  7. “Nhưng người dùng đặc câu hỏi là trên thị trường đã có app tương tự chưa, điểm khác biệt là gì. Liệu nhu cầu này có thực sự cao, có phải nỗi đau thực sự không. Chức năng dịch chất lượng như thế nào, làm sao để đánh giá là tốt.”
 
 ## §2. Impact & quyết định chọn
 
@@ -69,7 +77,7 @@ _Hình 1. Workflow từ thu âm, tạo transcript, phân loại nội dung, ki�
   4. Không tự động chọn phương án khi transcript nói rõ là chưa chốt.
   5. Không tối ưu glossary bằng cách rewrite prose chung; correction phải hẹp và có positive/negative test.
 - Mức prototype nhắm tới: [ ] Sketch  [ ] Mock  [x] Working.
-  - Thật: capture microphone/system qua Tauri + `clipclip`; VAD và segment bounded; ASR local MLX/Groq; raw text cạnh clean text; structured summary; evidence ID validation; lưu note; dịch theo đoạn; ZeroTTS.
+  - Thật: capture microphone/system qua Tauri + `clipclip`; VAD và segment bounded; ASR local bằng MLX/PhoWhisper hoặc ASR cloud qua Groq; raw text cạnh clean text; structured summary; evidence ID validation; lưu note; dịch theo đoạn; ZeroTTS.
   - Mock/demo: note mẫu “Review khảo sát người dùng”; synthetic meeting và audio fixture; số liệu quality trong report chưa phải benchmark giọng người thật.
 - Automation: [x] augment  [x] conditional  [ ] automate.
   - AI được phép augment: sửa dấu câu/ghép context, chuẩn hóa thuật ngữ hẹp, phân loại và gợi ý summary.
@@ -128,7 +136,7 @@ _Hình 1. Workflow từ thu âm, tạo transcript, phân loại nội dung, ki�
 |---|---|---:|---|
 | Regression hiện có | `eval/test_pipeline.py` | 21/21 pass theo `ASR_QUALITY_REPORT.md` | Đã có |
 | Rust validation | tests trong `src-tauri/src/lib.rs` | 2 test validation theo report | Đã có theo report; cần chạy lại trong checkout hiện tại |
-| Human acceptance v1.1 | VN01–VN20 | 16/20 = 80% | Đạt ngưỡng số lượng; chưa đạt quality bar vì còn 4 lỗi |
+| Human acceptance v1.1 | VN01–VN20 | 15/20 = 75% | Chưa đạt ngưỡng số lượng và còn 2 lỗi nghiêm trọng |
 | Latency thật | corpus người dùng | p50/p95 `[CHƯA ĐO]` | Cần bổ sung |
 
 ### Chi tiết acceptance run v1.1
@@ -138,6 +146,7 @@ _Hình 1. Workflow từ thu âm, tạo transcript, phân loại nội dung, ki�
 | VN09 | FAIL | Action giữ đúng owner nhưng `README` bị nhận thành `file with me`; sai đích công việc. |
 | VN13 | FAIL | `Groq`/`gsk` bị nhận thành `gốc`/`jfk`; lỗi credential nghiêm trọng, có thể làm cấu hình API sai. |
 | VN17 | FAIL | Export chỉ có `System audio` nhưng summary khẳng định có câu từ microphone; chưa chứng minh được tách nguồn, cần chạy lại với `Both`. |
+| VN18 | FAIL | Từ `sprint` bị nhận thành `screen`; ý deferred sang quý sau vẫn được giữ nhưng thuật ngữ công việc bị sai. |
 | VN19 | FAIL | Quyết định giữ phạm vi bị xếp thành `Tentative Decision`; export chưa thể hiện evidence timestamp. |
 
 - Điểm tốt: giữ đúng số 86/120, thiếu 34, latency 800 ms và 1,2 giây; giữ các quyết định về phát hành, ngày review, TTS và không gửi audio; phân biệt phần chưa chốt và giữ đúng phần lớn owner Lan/Minh/Huy/Mai.
@@ -158,11 +167,11 @@ _Hình 1. Workflow từ thu âm, tạo transcript, phân loại nội dung, ki�
 
 | Họ và tên | Mã số | Trạng thái |
 |---|---|---|
-| Nguyễn Ngọc Vĩnh | 2A202602833 | Sẵn sàng thử sản phẩm ở CP5 |
-| Vũ Đức Minh | 2A202602895 | Sẵn sàng thử sản phẩm ở CP5 |
-| NGUYỄN VIỆT HOÀNG | 02424 | Sẵn sàng thử sản phẩm ở CP5 |
-| NGUYỄN QUANG HUY | 02421 | Sẵn sàng thử sản phẩm ở CP5 |
-| NGUYỄN TẤT ĐẠT | 02578 | Sẵn sàng thử sản phẩm ở CP5 |
+| Nguyễn Ngọc Vĩnh | 2A202602833 | Đã thực hiện validation |
+| Vũ Đức Minh | 2A202602895 | Đã thực hiện validation |
+| NGUYỄN VIỆT HOÀNG | 02424 | Đã thực hiện validation |
+| NGUYỄN QUANG HUY | 02421 | Đã thực hiện validation |
+| NGUYỄN TẤT ĐẠT | 02578 | Đã thực hiện validation |
 | NGUYỄN HỒNG CƯỜNG | 02415 | Sẵn sàng thử sản phẩm ở CP5 |
 | NGUYỄN THỊ BẢO TRANG | 02580 | Sẵn sàng thử sản phẩm ở CP5 |
 | Chưa thu thập tên | 2A202602769 | Sẵn sàng thử sản phẩm ở CP5 |
@@ -177,16 +186,17 @@ _Hình 1. Workflow từ thu âm, tạo transcript, phân loại nội dung, ki�
 | Code/integration | Lê Hoàng Thiên Phú — 2A202602908 |
 | Demo + validation | Nguyễn Thanh Phong — 2A202602843  |
 
-- Willing users: Nguyễn Ngọc Vĩnh (2A202602833) và Vũ Đức Minh (2A202602895), đều sẵn sàng thử sản phẩm ở CP5.
+- Người dùng đã hoàn thành validation: Nguyễn Ngọc Vĩnh (2A202602833), Vũ Đức Minh (2A202602895), NGUYỄN VIỆT HOÀNG (02424), NGUYỄN QUANG HUY (02421) và NGUYỄN TẤT ĐẠT (02578). Hai người đầu là willing user đã khai từ CP1; cả 5 đã có hồ sơ task, quan sát, quote nguyên văn và quyết định xử lý trong `validation/vietnote-user-validation-report.md`.
 - Điều phối/tổng hợp: Đinh Văn Hùng — 2A202602443 (Nhóm trưởng).
 - Phương thức phân công: bốc ngẫu nhiên 5 hạng mục chỉ trong 4 thành viên chính; Nguyễn Quốc Cường nhận 2 hạng mục. Hai willing users không nằm trong phân công nội bộ, chỉ tham gia thử sản phẩm/validation ở CP5.
-- Kế hoạch validation: mỗi người chạy cùng VN01–VN20 trong một meeting, ghi backend/model, transcript, summary, evidence, severe error và latency; không đọc lại câu nếu ASR nhận sai trong lượt đo.
+- Validation người dùng: 5 người ngoài nhóm đã dùng prototype; hồ sơ gồm danh tính, task, chỗ kẹt, quote nguyên văn và quyết định của nhóm được lưu tại [validation/vietnote-user-validation-report.md](validation/vietnote-user-validation-report.md). Acceptance VN01–VN20 là lượt đo kỹ thuật riêng, ghi backend/model, transcript, summary, evidence, severe error và latency; không dùng test fixture thay cho quote người dùng.
+- Dữ liệu form trải nghiệm bổ sung: n=5, dùng backend local trong khoảng 18:00–21:00 ngày 17/09/2026; UI 4,4/5, transcript 3,8/5, dịch 3,8/5, summary hữu ích/rất hữu ích 5/5, yên tâm dữ liệu 3,6/5, sẵn sàng dùng 7,4/10. Đây là self-report chưa có tên/mã số và chưa thay thế log quan sát/quote nguyên văn.
 - Multi-prototype: chưa thực hiện. Nếu làm, so sánh hai trục: (A) summary realtime tối giản với ít phân loại và (B) structured summary evidence-first; chọn B nếu tỷ lệ evidence hợp lệ và decision safety đạt quality bar mà latency vẫn chấp nhận được.
 - Kế hoạch trước CP6:
-  1. Xác nhận tên nhóm Unicorn, Zone C4 và người phụ trách từng hạng mục; đã có đủ ≥2 willing users.
+  1. Xác nhận tên nhóm Unicorn, Zone C4 và người phụ trách từng hạng mục; đã chốt đủ 5 người ngoài nhóm cho R6, trong đó 2 người khai từ CP1.
   2. Bổ sung research log cho ≥2 sản phẩm tương tự.
-  3. Chạy lại VN09, VN13, VN17 bằng local và/hoặc Groq; chạy VN17 với nguồn `Both`; lưu kết quả JSON và video public/Drive.
-  4. Sửa lỗi nhận diện `README`, `Groq/gsk`, phân loại VN19 và export evidence timestamp; bổ sung regression case tương ứng.
+  3. Chạy lại VN09, VN13, VN17, VN18 và VN19 bằng local và/hoặc Groq; chạy VN17 với nguồn `Both`; lưu kết quả JSON và video public/Drive.
+  4. Sửa lỗi nhận diện `README`, `Groq/gsk`, `sprint`, phân loại VN19 và export evidence timestamp; bổ sung regression case tương ứng.
   5. Đo p50/p95 latency trên ít nhất 20–50 đoạn họp thật; tách số liệu theo microphone/system/both nếu có.
   6. Bổ sung case cho mọi lỗi mới, gồm positive/negative test nếu liên quan glossary hoặc prompt.
 
@@ -194,10 +204,18 @@ _Hình 1. Workflow từ thu âm, tạo transcript, phân loại nội dung, ki�
 
 | Thời điểm | Đổi gì | Vì sao (trỏ về feedback/case nào) |
 |---|---|---|
+| 18/09/2026 | Cập nhật acceptance v1.1 thành 15/20 = 75%, gồm 5 case chưa đạt và 2 lỗi nghiêm trọng | Đồng bộ với report chi tiết mới nhất; thay số 16/20 cũ |
+| 18/09/2026 | Cập nhật trạng thái 5 willing users thành đã thực hiện validation và liên kết report danh tính/quote | Validation đã hoàn thành với 5 người ngoài nhóm; Nguyễn Ngọc Vĩnh và Vũ Đức Minh là hai người khai từ CP1 |
+| 18/09/2026 | Bổ sung mô tả Local/Cloud trong hướng dẫn sản phẩm | Quote người dùng: “Có đảm bảo tính bảo mật dữ liệu không” |
+| 18/09/2026 | Bổ sung định vị local-first, tiếng Việt trước, không cần bot; không dùng claim khác biệt khi chưa có benchmark | Quote người dùng: “Hiện tại Notion cũng có chức năng tương tự thì sao” |
+| 18/09/2026 | Đưa tích hợp Discord vào backlog sau reliability/accuracy | Quote người dùng: “Liệu có thể tạo thành chatbot cho discord không” |
+| 18/09/2026 | Bổ sung 5 phản hồi form trải nghiệm vào `validation/validation-log.md` với các điểm trung bình và vấn đề dịch chưa tự nhiên | Có dữ liệu thật n=5 từ ngày 17/09; ghi rõ đây là self-report, không nhầm với quote hoặc quan sát trực tiếp |
+| 18/09/2026 | Mở rộng validation log thành đủ 5 slot người dùng ngoài nhóm, thêm yêu cầu quote nguyên văn, quyết định sau phiên và bảng changelog | Đối chiếu sổ tay Hackathon K4 §R6: cần 5 người ngoài nhóm, trong đó 2 người khai từ CP1; không điền dữ liệu giả khi chưa thử thực tế |
+| 17/09/2026 | Tạo `validation/validation-log.md` với task, câu hỏi quan sát và bảng log cho Nguyễn Ngọc Vĩnh và Vũ Đức Minh | Chuẩn bị vòng validation CP5; chưa điền quote/quan sát khi chưa có phiên thử thực tế |
 | 17/09/2026 | Bổ sung nghiên cứu Otter.ai vào §3, gồm flow, điểm đáng học, điểm cần né và khác biệt của VietNote | Hoàn thiện phần giải pháp tương tự theo yêu cầu của spec; nhấn mạnh bài học từ lỗi VN09, VN13 và VN19 về owner, credential và phân loại/evidence |
 | 17/09/2026 | Tạo spec cho lát cắt structured meeting summary có evidence, dựa trên pipeline ASR hiện tại | Cần chốt quality bar trước CP4; repo đã có acceptance 20 case và validation evidence nhưng chưa có spec hợp nhất. |
 | 17/09/2026 | Chốt quality bar ≥16/20 và 0 severe error | Lấy nguyên văn ngưỡng MVP trong `eval/VietNote_ACCEPTANCE_TESTS.md`; giữ nguyên sau CP4. |
 | 17/09/2026 | Ghi rõ các gap: user thật, research sản phẩm tương tự, p50/p95, WER/CER, phân công | Các dữ liệu này chưa tồn tại trong repo; đánh dấu để không nhầm prototype evidence với production evidence. |
-| 17/09/2026 | Cập nhật acceptance run v1.1: 16/20 = 80%, 4 case chưa đạt (VN09, VN13, VN17, VN19) | Kết quả test nhóm cung cấp; đạt ngưỡng số lượng nhưng chưa đạt quality bar do lỗi đích action, credential, nguồn âm thanh và phân loại/evidence. |
+| 17/09/2026 | Ghi nhận acceptance run v1.1 ban đầu là 16/20; số liệu này đã được thay thế bởi report chi tiết ngày 18/09/2026 | Giữ lịch sử thay đổi; kết quả hiện hành là 15/20 với 5 case chưa đạt (VN09, VN13, VN17, VN18, VN19). |
 | 17/09/2026 | Bốc ngẫu nhiên phân công 5 hạng mục cho 5 thành viên; nhóm trưởng điều phối | Hoàn thiện §8 theo yêu cầu phân công của nhóm. |
 | 17/09/2026 | Điều chỉnh phân công chỉ dùng 4 thành viên chính; loại 2 willing users khỏi bảng phân công | Willing users chỉ có vai trò thử sản phẩm/validation ở CP5; Nguyễn Quốc Cường nhận thêm hạng mục Prompt + schema/eval. |
