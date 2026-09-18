@@ -1,0 +1,4 @@
+mlx-whisper==0.4.3
+numpy>=1.26,<3
+openai>=2,<3
+zerotts==0.1.5
