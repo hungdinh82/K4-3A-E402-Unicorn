@@ -8,7 +8,7 @@
 
 | Họ và Tên | Mã Học Viên | Vai trò chính | Phần việc đảm nhiệm trong dự án |
 |---|---|---|---|
-| Đinh Văn Hùng | 2A202602443 | Nhóm trưởng | Điều phối; evidence/mining; tổng hợp spec, acceptance report và quality bar |
+| Đinh Văn Hùng | 2A202602443 | Nhóm trưởng | Điều phối, định hướng xem team phải làm gì, quản lý git, tổng hợp spec, điền form|
 | Nguyễn Thanh Phong | 2A202602843 | Thành viên | Đề xuất ý tưởng; phát triển MVP, ASR/summary realtime và UI/UX |
 | Lê Hoàng Thiên Phú | 2A202602908 | Thành viên | Nghiên cứu người dùng; khảo sát/willing user; test case và chuẩn bị slide |
 | Nguyễn Quốc Cường | 2A202602886 | Thành viên | Spec; prompt, schema và eval; quality bar/evidence validation |
